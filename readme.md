@@ -48,10 +48,10 @@ Create pull request against any bug or feature (raise one if doesnot exit). Afte
   1. [Configuration](#configuration)
   1. [Example test cases](#example-test-cases)
   1. [Reporting](#reporting)
-  1. [Build and Deployment](#build-deployment)
-  1. [Mock-Server](#mock-server)
+  1. [Build and Deployment](#build-and-deployment)
+  1. [Mock Server](#mock-server)
   1. [Annotations](#annotations)
-  1. [Best-Practices](#naming)
+  1. [Best-Practices](#best-practices)
   1. [Modularity](#modularity)
 
 ## Design
