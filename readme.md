@@ -25,8 +25,6 @@ Below points may interesets you using this tool
 ### Need support using this tool in your org
 Don't hesitate to write me a mail at (mrpjpandey@gmail.com with topic need Help) and I will help you for free.
 
-Many of my styles have been from the many pair programming sessions [Ward Bell](https://twitter.com/wardbell) and I have had. My friend Ward has certainly helped influence the ultimate evolution of this guide.
-
 ## See it in action in a Sample App
 While this guide explains the *what*, *why* and *how*, I find it helpful to see them in practice. This tool is accompanied by a sample application that follows basic usage . You can find the [sample application (named exampleApp) here](https://github.com/Priytam/auto/tree/master/exampleApp) in the `modular` folder. Feel free to grab it, clone it, or fork it. [Instructions on running it are in its readme](https://github.com/Priytam/auto/blob/master/exampleApp/readme.md).
 
