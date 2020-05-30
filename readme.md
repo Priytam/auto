@@ -1,7 +1,7 @@
 # Automation tool
 
 ## Team Endorsed
-Special thanks to Sugam Agrwal, Vipul Popli, for contribution.
+Special thanks to Sugam Agarwal, Vipul Popli for contribution.
 
 ## Purpose
 *To write automated tests for api, web ui and command line based application*
