@@ -56,6 +56,18 @@ Add new feature docs in table of contents
 
 ## Design
 
+
+![FlowChart](doc/flow.png)
+
+Auto is divided into three verticals
+
+* Components to be tests
+* Operations to be performed on components
+* Test Case which does above job and Assert its correctness
+
+
+
+
   ```java
   public class test() {
   }
