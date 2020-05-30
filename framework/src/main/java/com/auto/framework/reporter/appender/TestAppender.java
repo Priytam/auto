@@ -107,7 +107,7 @@ public class TestAppender implements TestReporterAppender {
     private synchronized String dumpCommandResults(CommandRequest cRequest, OpResult rResult) {
         iCommandNum++;
         String sCommandFile = fileStrategy.getCommandFile(cRequest.getCommandName() + "_" + iCommandNum);
-        String sFileName = TestReporter.getOutputDir() + File.separator + TestReporter.COMMANDS_DIR + File.separator + sCommandFile;
+        String sFileName = TestReporter.getOutputDir() + File.separator + TestReporter.OPERATIONS_DIR + File.separator + sCommandFile;
         writeToFile(cRequest, rResult, sFileName);
         return sFileName;
     }
@@ -115,7 +115,7 @@ public class TestAppender implements TestReporterAppender {
     private synchronized String dumpWebResults(String sName, String sUrl, String sRequest, int iStatusCode, String bOutput) {
         iCommandNum++;
         String sCommandFile = fileStrategy.getCommandFile(sName + "_" + iCommandNum);
-        String sFileName = TestReporter.getOutputDir() + File.separator + TestReporter.COMMANDS_DIR + File.separator + sCommandFile;
+        String sFileName = TestReporter.getOutputDir() + File.separator + TestReporter.OPERATIONS_DIR + File.separator + sCommandFile;
         writeToFile(sRequest, iStatusCode, bOutput, sUrl, sFileName);
         return sFileName;
     }

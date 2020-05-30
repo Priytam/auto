@@ -1,4 +1,4 @@
-package com.auto.example;
+package com.auto.reqres;
 
 import com.auto.framework.runner.TestsExecutor;
 import com.auto.framework.runner.mail.MailConfig;

@@ -1,6 +1,8 @@
 package com.auto.framework;
 
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * User: Priytam Jee Pandey
  * Date: 28/05/20
@@ -8,20 +10,23 @@ package com.auto.framework;
  * email: mrpjpandey@gmail.com
  */
 public class TestComponentData {
-    private String host;
-    private String logDir;
-    private int port;
+    private final String server;
+    private final String host;
+    private final String logDir;
+    private final int port;
 
     private TestComponentData(Builder builder) {
         host = builder.host;
         logDir = builder.logDir;
         port = builder.port;
+        server = builder.server;
     }
 
     public static class Builder {
-        private String host = null;
+        private String host = StringUtils.EMPTY;
+        private int port = 0;
+        private String server = StringUtils.EMPTY;
         private String logDir = null;
-        private int port;
 
         public Builder() {
         }
@@ -32,6 +37,21 @@ public class TestComponentData {
             this.port = port;
             return build();
         }
+
+        public TestComponentData build(String server, String logDir) {
+            this.logDir = logDir;
+            this.server = server;
+            return build();
+        }
+
+        public TestComponentData build(String host, int port, String server, String logDir) {
+            this.logDir = logDir;
+            this.host = host;
+            this.port = port;
+            this.server = server;
+            return build();
+        }
+
 
         private TestComponentData build() {
             return new TestComponentData(this);
@@ -48,5 +68,9 @@ public class TestComponentData {
 
     public String getLogDir() {
         return logDir;
+    }
+
+    public String getServer() {
+        return server;
     }
 }

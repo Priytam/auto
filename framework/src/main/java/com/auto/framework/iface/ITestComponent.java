@@ -18,6 +18,9 @@ public interface ITestComponent {
     String getLogDir();
 
     Integer getCleanOrder();
+
+    String getServer();
+
     String getComponentName();
     void clean(boolean bForce);
     void prepare();

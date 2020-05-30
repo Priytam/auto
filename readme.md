@@ -96,15 +96,169 @@ which have operations to
  * Single User (https://reqres.in/api/users/2), 
  * Single User not found (https://reqres.in/api/users/23).
 
-Here we have one Component to test (reqres) by performing above three operation. Since We can't start stop this component
 
-Our component will be 
+Create a gradle/maven project and include auto framework as dependency
+```groovy
+dependencies {
+    compile 'com.github.priytam:framework:1.0'
+}
+```
 
- ```java
-    public class Reqres extends AlwaysRunningAbstractTestComponent {
+```xml
+<dependency>
+  <groupId>com.github.priytam</groupId>
+  <artifactId>framework</artifactId>
+  <version>1.0</version>
+</dependency>
+```
+Here we have one Component to test (reqres) by performing above three operation. Since We can't start stop this component.
 
-    } 
-  ```
+Component will be AlwaysRunningComponent
+```java
+    public class ReqResServer extends AbstractAlwaysRunningTestComponent {
+    
+        protected ReqResServer(TestComponentData dData) {
+            super(dData);
+        }
+    
+        @Override
+        public void clean(boolean bForce) {
+            // will be called during component tear down
+        }
+    
+        @Override
+        public void prepare() {
+            // prepare component 
+        }
+    }
+```
+
+Creating our Test case
+```java
+    public class ReqResTestCase extends AbstractTestCase {
+    
+        private ReqResServer server;
+    
+        protected ReqResTestCase() {
+            super("ReqRes");
+        }
+    
+        @Override
+        protected void initComponents() {
+            TestComponentData testComponentData = new TestComponentData.Builder()
+                    .build(getCurrentApplicationConfig().getServer());
+            server = new ReqResServer(testComponentData);
+        }
+    
+        @Override
+        public List<? extends ITestComponent> getTestComponents() {
+            TestReporter.TRACE("init example components");
+            List<ITestComponent> lstComponents = new ArrayList<>();
+            lstComponents.add(server);
+            return lstComponents;
+        }
+        
+        public ReqResServer getServer() {
+            return server;
+        }
+    }
+```
+
+Creating GetUser Operation
+```java
+public class GetUserOp  extends AbstractHttpOperation {
+
+    private final String baseUrl;
+    private final int userId;
+    private final static String USER_ENDPOINT = "/api/users/";
+
+    public GetUserOp(String baseUrl, int userId) {
+        this.baseUrl = baseUrl;
+        this.userId = userId;
+    }
+
+    @Override
+    protected HttpRequestBuilder getHttpRequestBuilder() {
+        return new HttpRequestBuilder()
+                .withBaseUrl(baseUrl + USER_ENDPOINT + userId)
+                .withApiName("getUser")
+                .withMimeType(MimeTypes.APPLICATION_JSON)
+                .withRequestType(HttpMethods.GET);
+    }
+
+    @Override
+    public boolean shouldRunInBackground() {
+        return false;
+    }
+
+    @Override
+    public String getName() {
+        return "GetUserOp";
+    }
+}
+```
+
+Add getUser method in ReqResServer
+```java
+    public User getUser(int userId) {
+        OpResult opResult = performOperation(new GetUserOp(getServer(), userId));
+        if (CollectionUtils.isNotEmpty(opResult.getStdOut())) {
+            return JsonUtil.deSerialize(opResult.toStringAsOneLine(), User.class);
+        }
+        return null;
+    }
+```
+
+**Above work is one time now once can keep on writing tests for every feature of this component as below**
+
+Test to check valid user for id 2 and invalid no user for id 23
+```java
+public class BasicTests extends ReqResTestCase {
+
+   
+    @Test
+    public void validUser() {
+        User user = getServer().getUser(2);
+        Check.assertNotNull(user, "User not found");
+        Check.assertNotNull(user.getData(), "User data was null");
+        Check.assertEquals("janet.weaver@reqres.in", user.getData().getEmail(), "Incorrect email id");
+        Check.assertEquals(2, user.getData().getId(), "Id was incorrect");
+    }
+    
+    @Test
+    public void invalidUser() {
+        User user = getServer().getUser(23);
+        Check.assertNull(user, "User found");
+    }
+
+    @Test
+    public void adData() {
+        User user = getServer().getUser(2);
+        Check.assertNotNull(user.getAd(), "Ad was null");
+        Check.assertNotNull(user.getAd().getCompany(), "Ad company was null");
+        Check.assertEquals("StatusCode Weekly", user.getAd().getCompany(), "Incorrect company name");
+    }
+}
+```
+![See complete implementation here](https://github.com/Priytam/auto/tree/master/exampleApp/src/main/java/com/auto/example)
+
+**Best part is component log**
+Below is screen shot of test for above test validUser()
+![Log](doc/log.png)
+
+See the line **Running with base dir** this is the directory where test logs will be saved (screen shot of that directory).
+
+![BaseDir](doc/basedir.png)
+
+in above screenshot of base dir we can see all tests log is present in separate test directory(classname_methodname) and each 
+has operations dir with all operations' request, response and status performed in test case in separate files (operation_<name>_seqno)
+
+In log screenshot see the line **result in file** this log indicates the get user operation ran in test with link to file 
+location, this becomes handy while automating test cases we can click on file and see what went wrong... wow
+
+Let's see the content of file (content is obvious no need to explain)
+
+![BaseDir](doc/operation.png)
 
 **[Back to top](#table-of-contents)**
 

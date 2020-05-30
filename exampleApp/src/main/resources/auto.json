@@ -1,11 +1,9 @@
 {
-  "resourcePath" : "/tmp/resources",
+  "resourcePath": "/tmp/resources",
   "applications": [
     {
-      "name": "example",
-      "host": "locahost",
-      "port": "8435",
-      "server": "https://reqres.in/",
+      "name": "ReqRes",
+      "server": "https://reqres.in",
       "logDir": "/var/log/tomcat7/catalina.out"
     },
     {

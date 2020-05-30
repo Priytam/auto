@@ -36,7 +36,7 @@ import static com.google.common.collect.Maps.newHashMap;
  */
 public class TestReporter {
 
-    public final static String COMMANDS_DIR = "commands";
+    public final static String OPERATIONS_DIR = "operations";
     public static final String CONTENT_DIR = "content";
     private final static String TEST_LOG = "test.log";
     private static final String STDOUT_APPENDER = "STDOUT_APPENDER";
@@ -213,7 +213,7 @@ public class TestReporter {
 
     private static void initOutputDir() {
         new File(getOutputDir()).mkdirs();
-        new File(getOutputDir() + File.separator + COMMANDS_DIR).mkdir();
+        new File(getOutputDir() + File.separator + OPERATIONS_DIR).mkdir();
         new File(getOutputDir() + File.separator + CONTENT_DIR).mkdir();
     }
 

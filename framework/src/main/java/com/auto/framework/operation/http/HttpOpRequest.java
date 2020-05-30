@@ -64,7 +64,7 @@ public class HttpOpRequest implements OpRequest {
             wr.flush();
             wr.close();
         } catch (Exception e) {
-
+            TestReporter.TRACE(e.getMessage());
         }
     }
 
@@ -79,7 +79,7 @@ public class HttpOpRequest implements OpRequest {
             in.close();
             return response;
         } catch (Exception e) {
-            TestReporter.TRACE(e);
+            TestReporter.TRACE(e.getMessage());
         }
 
         return null;
@@ -113,7 +113,6 @@ public class HttpOpRequest implements OpRequest {
     public void setContent(String requestBody) {
         this.requestBody = requestBody;
     }
-
 
     @Override
     public String getCommandName() {

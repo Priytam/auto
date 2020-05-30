@@ -12,7 +12,7 @@ public class SeparateFilePerCommandStrategy implements IOutputFileStrategy {
 
     @Override
     public String getCommandFile(String commandNum) {
-        return "command_file_" + commandNum;
+        return "operation_" + commandNum;
     }
 
 }
