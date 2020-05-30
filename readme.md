@@ -111,7 +111,7 @@ dependencies {
   <version>1.0</version>
 </dependency>
 ```
-Here we have one Component to test (reqres) by performing above three operation. Since We can't start stop this component.
+Here we have one component to test (reqres) by performing above three operations. Since we can't start stop this component.
 
 Component will be AlwaysRunningComponent
 ```java
@@ -240,23 +240,26 @@ public class BasicTests extends ReqResTestCase {
     }
 }
 ```
-![See complete implementation here](https://github.com/Priytam/auto/tree/master/exampleApp/src/main/java/com/auto/example)
+[See complete implementation here](https://github.com/Priytam/auto/tree/master/exampleApp/src/main/java/com/auto/example)
 
-**Best part is component log**
-Below is screen shot of test for above test validUser()
+**Best part is test log**
+
+Below is screenshot of test for above test validUser()
 ![Log](doc/log.png)
 
-See the line **Running with base dir** this is the directory where test logs will be saved (screen shot of that directory).
+See the line **INIT: Running with base dir** the link after this is the directory where test logs will be saved (below is screenshot of that directory).
 
 ![BaseDir](doc/basedir.png)
 
 in above screenshot of base dir we can see all tests log is present in separate test directory(classname_methodname) and each 
-has operations dir with all operations' request, response and status performed in test case in separate files (operation_<name>_seqno)
+has operations dir with all operations' request, response and status performed in test case in separate files (operation_<name>_seqno).
+
+The current directory is softlink to most recent test ran, helps to identify directory of test we are wroking on.
 
 In log screenshot see the line **result in file** this log indicates the get user operation ran in test with link to file 
-location, this becomes handy while automating test cases we can click on file and see what went wrong... wow
+location, this becomes handy while automating test cases we can click on file and see what went wrong... wow.
 
-Let's see the content of file (content is obvious no need to explain)
+Let's see the content of file (content is obvious no need to explain).
 
 ![BaseDir](doc/operation.png)
 
