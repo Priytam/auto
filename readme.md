@@ -51,7 +51,7 @@ Create pull request against any bug or feature (raise one if doesnot exit). Afte
   1. [Build and Deployment](#build-and-deployment)
   1. [Mock Server](#mock-server)
   1. [Annotations](#annotations)
-  1. [Best-Practices](#best-practices)
+  1. [Best Practices](#best-practices)
   1. [Modularity](#modularity)
 
 ## Design
