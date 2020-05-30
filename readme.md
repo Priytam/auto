@@ -240,11 +240,11 @@ public class BasicTests extends ReqResTestCase {
     }
 }
 ```
-[See complete implementation here](https://github.com/Priytam/auto/tree/master/exampleApp/src/main/java/com/auto/example)
+[See complete implementation here](https://github.com/Priytam/auto/tree/master/exampleApp/src/main/java/com/auto/reqres)
 
-**Best part is test log**
+**Best part is test log, Let's have a look**
 
-Below is screenshot of test for above test validUser()
+Below is screenshot of test log for above test validUser()
 ![Log](doc/log.png)
 
 See the line **INIT: Running with base dir** the link after this is the directory where test logs will be saved (below is screenshot of that directory).
