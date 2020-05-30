@@ -59,28 +59,51 @@ Add new feature docs in table of contents
 
 ![FlowChart](doc/flow.png)
 
-Auto is divided into three verticals
+Testing is divided into three verticals
 
 * Components to be tests
 * Operations to be performed on components
 * Test Case which does above job and Assert its correctness
 
+Components can be any application which uses any or all of Http api, Web Ui or Command Line 
+to interact.
 
+Operation is the request we made to component to perform some action. 
 
+Test Case contain sets of Operation performed on component and one or more Assertion to check Its validity.
 
-  ```java
-  public class test() {
-  }
-  ```
+Above design decouple tests from operation and components and helps in zero test maintainability,
+Lets say component was written in Node.js and now org decided to move it to java spring boot and hence its start stop
+operation is different now what we need to change is stopOp and startOp of component and all hundreds and thousands of 
+tests will remain intact and will continue to run like charm.
 
+Suppose a travel product UI automated using this tool which have operation flight search and now UI template changed to material design
+all automated tests written will keep on running after changing searchOp.   
+
+One can say yes I can achieve this without any framework! My answer is yes you can. This framework helps you to achieve 
+this in easy and clean way with high level of abstraction and advance apis. This framework follows best practices.
+ 
+Auto has Generic Command Line, Http and Web action (using selenium) Op. It keeps the track of all operation performed in tests
+helps in debugging. It has embedded mock server to mock third party api for tests stability.   
 
 **[Back to top](#table-of-contents)**
 
 ## Getting Started
 
-  ```java
-  public class test() {
-  }
+It is very easy to start using this tool, let me explain the same using some example. We will write test to automate https://reqres.in/
+which have operations to
+ * List users (https://reqres.in/api/users?page=2), 
+ * Single User (https://reqres.in/api/users/2), 
+ * Single User not found (https://reqres.in/api/users/23).
+
+Here we have one Component to test (reqres) by performing above three operation. Since We can't start stop this component
+
+Our component will be 
+
+ ```java
+    public class Reqres extends AlwaysRunningAbstractTestComponent {
+
+    } 
   ```
 
 **[Back to top](#table-of-contents)**
