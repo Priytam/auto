@@ -1,0 +1,24 @@
+package com.auto.framework.iface;
+
+/**
+ * User: Priytam Jee Pandey
+ * Date: 28/05/20
+ * Time: 1:17 pm
+ * email: mrpjpandey@gmail.com
+ */
+public interface ITestComponent {
+    void start();
+    void stop();
+    void restart();
+    boolean isRunning();
+
+    String getHost();
+    int getPort();
+
+    String getLogDir();
+
+    Integer getCleanOrder();
+    String getComponentName();
+    void clean(boolean bForce);
+    void prepare();
+}

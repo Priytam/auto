@@ -1,0 +1,10 @@
+{
+  "enabled": "false",
+  "to": "mrpjpandey@gmail.com,",
+  "from": "mrpjpandey@gmail.com",
+  "fromName" : "Priytam Jee Pandey",
+  "host" : "mailrelay.test.com",
+  "port" : "25",
+  "user" : "",
+  "password" : ""
+}

@@ -1,0 +1,28 @@
+# Operating System Files
+*.DS_Store
+*~
+.#*
+#*
+*#
+
+# Build Files #
+bin
+out
+target
+build/
+.gradle
+
+# IntelliJ IDEA Files #
+*.iml
+*.ipr
+*.iws
+*.idea
+
+**/generated
+
+/target/
+.classpath
+.project
+.settings
+
+

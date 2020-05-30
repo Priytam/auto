@@ -1,0 +1,18 @@
+{
+  "resourcePath" : "/tmp/resources",
+  "applications": [
+    {
+      "name": "example",
+      "host": "locahost",
+      "port": "8435",
+      "server": "https://reqres.in/",
+      "logDir": "/var/log/tomcat7/catalina.out"
+    },
+    {
+      "name": "Mock Server",
+      "host": "localhost",
+      "port": "3487",
+      "logDir": "/var/log/mockserver.log"
+    }
+  ]
+}
