@@ -1,9 +1,17 @@
-plugins {
-    id 'java'
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.5.3"
+    }
 }
+apply plugin: 'io.codearte.nexus-staging'
+apply plugin: 'java'
 
-group 'com.auto'
-version '1.0-SNAPSHOT'
+
+group 'com.github.priytam'
+version '1.0'
 
 repositories {
     mavenCentral()
@@ -23,4 +31,84 @@ subprojects {
             jcenter()
         }
     }
+}
+
+if (project.hasProperty('release')) {
+
+    subprojects {
+
+        task javadocJar(type: Jar) {
+            classifier = 'javadoc'
+            from javadoc
+        }
+
+        task sourcesJar(type: Jar) {
+            classifier = 'sources'
+            from sourceSets.main.allSource
+        }
+
+        artifacts {
+            archives javadocJar, sourcesJar
+        }
+    }
+
+    allprojects {
+        apply plugin: 'signing'
+        apply plugin: 'maven'
+
+        // Signature of artifacts
+        signing {
+            sign configurations.archives
+        }
+
+        // OSSRH publication
+        uploadArchives {
+            repositories {
+                mavenDeployer {
+                    beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+                    // Target repository
+                    /*repository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
+                        authentication(userName: ossrhUser, password: ossrhPassword)
+                    }*/
+                    repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
+                        authentication(userName: ossrhUser, password: ossrhPassword)
+                    }
+                    pom.project {
+                        name project.name
+                        description project.description
+                        packaging 'jar'
+                        url 'https://github.com/priytam/auto'
+
+                        scm {
+                            connection 'scm:git:https://github.com/priytam/auto.git'
+                            developerConnection 'scm:git:git@github.com:/priytam/auto.git'
+                            url 'https://github.com/priytam/auto.git'
+                        }
+
+                        licenses {
+                            license {
+                                name 'The MIT License (MIT)'
+                                url 'http://opensource.org/licenses/MIT'
+                                distribution 'repo'
+                            }
+                        }
+
+                        developers {
+                            developer {
+                                id = 'pjpandey'
+                                name = 'Priytam Jee Pandey'
+                                email = 'mrpjpandey@gmail.com'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+nexusStaging {
+    username = ossrhUser
+    password = ossrhPassword
 }
