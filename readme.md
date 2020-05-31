@@ -44,6 +44,7 @@ Add new feature docs in table of contents
         * [Api Operations](#api-opration)
         * [Commandline Operations](#commandline-opration)
         * [WebUi Operations](#webui-opration)
+  1. [Life Cycle](#life-cycle)
   1. [Checks](#checks)
   1. [Configuration](#configuration)
   1. [Example test cases](#example-test-cases)
@@ -342,11 +343,11 @@ Creating redis component
  }
   ```
 
-**Its clear now we need to provide below component**
+**Its clear now we need to provide below logic to component**
  * star Op
  * stop Op,
  * clean component
- * is running  component 
+ * is component running 
 
 Start Operation
 ```java
