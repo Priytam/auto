@@ -301,12 +301,11 @@ be in this test in regression env we can't guess which test ran before this.
 
 > Test should clean and start/stop component before and after run
 
-To create a component we need to know start/stop commands of application. Let's see an example of creating a component which
-test redis server
-
-> redis-server to start redis
-> redis-cli shutdown to stop
-> redis-cli ping to check if running
+To create a component we need to know start/stop commands of application. Let's see an example of creating a component for
+redis application.We will be using below commands to achieve redis component life cycle.
+* redis-server to start redis
+* redis-cli shutdown to stop
+* redis-cli ping to check if running
   
 Creating redis component
 ```java
