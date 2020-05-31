@@ -740,7 +740,7 @@ public class Runner {
 }
 ```
 
-To perform something before tests execution starts use withBeforeExecution(), like setting env variable
+To perform something before tests execution completes use withBeforeExecution(), like setting env variable
 ```java
 public class Runner {
         public static void main(String[] args) {
@@ -789,7 +789,7 @@ public class Runner {
 }
 ```
 
-To perform something on test log directory user , like saving log files in central cloud db
+To perform something on test log directory user, like saving log files in central cloud db
 ```java
 public class Runner {
     public static void main(String[] args) {
@@ -799,7 +799,7 @@ public class Runner {
     }
 }
 ```
-Test base directory contains 
+Test log directory contains 
 * operation folder with files for each operation 
 * test.log file
 * content folder with files if test dumped something for debugging purpose
