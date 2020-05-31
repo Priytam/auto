@@ -789,7 +789,7 @@ public class Runner {
 }
 ```
 
-To perform something on test log directory user, like saving log files in central cloud db
+To perform something on test log directory use withLogFileHandler(), like saving log files in central cloud db
 ```java
 public class Runner {
     public static void main(String[] args) {
