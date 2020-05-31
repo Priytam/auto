@@ -116,7 +116,6 @@ public abstract class AbstractTestComponent implements ITestComponent {
         return server;
     }
 
-
     @Override
     public String getComponentName() {
         return getClass().getSimpleName();

@@ -18,6 +18,7 @@ public class AutoConf {
         private int port;
         private String server;
         private String logDir;
+        private String installationDir;
 
         public String getName() {
             return name;
@@ -57,6 +58,14 @@ public class AutoConf {
 
         public void setLogDir(String logDir) {
             this.logDir = logDir;
+        }
+
+        public String getInstallationDir() {
+            return installationDir;
+        }
+
+        public void setInstallationDir(String installationDir) {
+            this.installationDir = installationDir;
         }
     }
 

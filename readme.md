@@ -252,6 +252,25 @@ public class BasicTests extends ReqResTestCase {
 ```
 [See complete implementation here](https://github.com/Priytam/auto/tree/master/exampleApp/src/main/java/com/auto/reqres)
 
+Now the last thing we need to do is provide a configuration of application. In the configuration, we can provide application
+host, port, server, installation dir etc... as this thing will keep on changing always keep in mind reading it from the 
+configuration as already we saw in ReqResTestCase while creating ReqResServer we read host and port from configurations.
+
+Create auto.conf folder in resource directory of your project as below.
+
+```text
+{
+  "resourcePath": "/tmp/resources",
+  "applications": [
+    {
+      "name": "ReqRes",
+      "server": "https://reqres.in",
+      "logDir": "/var/log/tomcat7/catalina.out"
+    }
+  ]
+}
+```
+
 **Best part is test log, Let's have a look**
 
 Below is screenshot of test log for above test validUser()
@@ -464,29 +483,69 @@ public class RedisServer extends AbstractTestComponent {
 }
 ```
 
-Test case life cycle will use you component implementation to do the following.
+Test case life cycle will use your component implementation to do the following.
 * Start component before run (Restart if already running)
 * Clean component before run
 * run Test
 * Clean component after run
 * Stop component
+
+`If we have more than one components in testcase and there is a requirement to clean them on order than we can override 
+getCleanOrder method to achieve the same.`
+
 See [Test case Life Cycle](#life-cycle) for more details.
 
 **[Back to top](#table-of-contents)**
 
 ## Test Case
+Testcase contains components under test and this is a place where we will assert correctness of our components under test
 
-  ```java
-  public class test() {
+Let's continue with above example and create the testcase for RedisServer we created above in `Component` section
+
+Create RedisTestcase (Test case will ask for component under test)
+
+```java
+  public class RedisTestCase extends AbstractTestCase {
+  
+      private RedisServer server;
+  
+      protected RedisTestCase() {
+          super("RedisServer");
+      }
+  
+      @Override
+      protected void initComponents() {
+          TestComponentData componentData = new TestComponentData
+                  .Builder()
+                  .build(getCurrentApplicationConfig().getInstallationDir());
+          server = new RedisServer(componentData);
+      }
+  
+      @Override
+      public List<? extends ITestComponent> getTestComponents() {
+          return Lists.newArrayList(server);
+      }
+  
+      public RedisServer getServer() {
+          return server;
+      }
   }
-  ```
+```
+
+We can see in test case we created instance of RedisServer by passing ComponentData. In ComponentData we only used redis
+installation directory from the configuration. For the configuration in detail see [Config](#configuration) section.
+
+> One can also use host and port from configuration to start server on the specific host and port 
+
+A test case can have more than one component, we can provide all component list here and framework will take care of their life cycle.
+
+
 **[Back to top](#table-of-contents)**
 
 ## Operations
 
   ```java
-  public class test() {
-  }
+
   ```
 **[Back to top](#table-of-contents)**
 
