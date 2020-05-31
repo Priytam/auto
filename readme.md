@@ -41,9 +41,11 @@ P.S. your PR should also contain explanation of changes below
   1. [Component](#component)
   1. [Test Case](#test-case)
   1. [Operations](#operations)
+        * [Custom Operation](#custom-operation)
         * [Api Operations](#api-opration)
         * [Commandline Operations](#commandline-opration)
         * [WebUi Operations](#webui-opration)
+        * [Method call as operations](#use-method-call-as-operations)
   1. [Life Cycle](#life-cycle)
   1. [Checks](#checks)
   1. [Configuration](#configuration)
@@ -97,7 +99,6 @@ Let me explain the same using some example. We will write test to automate https
  * List users (https://reqres.in/api/users?page=2), 
  * Single User (https://reqres.in/api/users/2), 
  * Single User not found (https://reqres.in/api/users/23).
-
 
 
 Create a gradle/maven project and include auto framework as dependency
@@ -490,7 +491,7 @@ Test case life cycle will use your component implementation to do the following.
 * Clean component after run
 * Stop component
 
-`If we have more than one components in testcase and there is a requirement to clean them on order than we can override 
+`If we have more than one components in testcase and there is a requirement to clean them on order then override 
 getCleanOrder method to achieve the same.`
 
 See [Test case Life Cycle](#life-cycle) for more details.
@@ -531,24 +532,26 @@ Create RedisTestcase (Test case will ask for component under test)
       }
   }
 ```
-
-We can see in test case we created instance of RedisServer by passing ComponentData. In ComponentData we only used redis
+We can see in test case we created instance of RedisServer by passing ComponentData. In ComponentData we used redis
 installation directory from the configuration. For the configuration in detail see [Config](#configuration) section.
 
 > One can also use host and port from configuration to start server on the specific host and port 
 
-A test case can have more than one component, we can provide all component list here and framework will take care of their life cycle.
+A test case can have more than one component, return all components list from method getTestComponents() and framework will take care of 
+their life cycle.
+
+[See Complete implementation here](#https://github.com/Priytam/auto/tree/master/exampleApp/src/main/java/com/auto/redis)
 
 
 **[Back to top](#table-of-contents)**
 
 ## Operations
-We have seen and created operation in previous sections. Currently, framework provides implementations of three types of 
-operations HttpApi, CommandLine and WebAction. It is easy to write custom operation as well
+We have seen and created many operations in previous sections. Currently, framework provides implementations of three types of 
+operations HttpApi, CommandLine and WebAction. It is easy to write custom operation as well.
 
-It is advised that a test case should always communicate components via operations, this helps in zero test 
-maintainability. Let's say for example your application is changed from ROR to SpringBoot and hence way of start and stop
-, in this scenario we only need to change our start stop operations and all tests will start running as it is.
+It is advised that a test case should always communicate components via operations, this helps in `zero test 
+maintainability`. Let's say for example your application is changed from ROR to SpringBoot and hence way of start and stop
+are changed, in this scenario it is only need to change start stop operations and all tests will start running as it was.
 
 ## Custom operation
 To create an Operation need to do the following.
@@ -634,6 +637,9 @@ might be installed in a different directory (`/usr/bin` on one machine and `/use
 
 ## WebUi Operations
 `Development is still in progress`
+
+## Use method call as operations
+
 
 **[Back to top](#table-of-contents)**
 
