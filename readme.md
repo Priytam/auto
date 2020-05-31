@@ -1,10 +1,7 @@
-# Automation tool
-
-## Team Endorsed
-Special thanks to Sugam Agarwal, Vipul Popli for contribution.
+# Enhanced Automation tool
 
 ## Purpose
-*To write automated tests for api, web ui and command line based application*
+*To write automated tests for api, web page and command line based application*
 
 Below points may interests you using this tool
 
@@ -17,17 +14,19 @@ Below points may interests you using this tool
 * Advance/enhanced rules
 * Clean test log and Keep logs of every action performed on server 
 * Highly configurable reporting
-* Easy deployable and ready to run regression
-* Capable of stopping and starting and cleaning components at every test run
-* Abstraction of http api, commandline and webApi operation to write tests faster
+* Easy build process and ready to run regression
+* Capable of stopping, starting and cleaning components at every test run
+* Abstraction of http api, command line and web action operation to write tests faster
 * Usable utils (Json, Xml, File etc.)
 
 ### Need support using this tool in your org
 Don't hesitate to write me a mail at `(mrpjpandey@gmail.com with the topic need help)`, and I will help you for free.
 
 ## See it in action in a Sample App
-While this guide explains the *what*, *why* and *how*, I find it helpful to see them in practice. This tool is accompanied by a sample application that follows basic usage.
-You can find the [sample application (named exampleApp) here](https://github.com/Priytam/auto/tree/master/exampleApp) in the `modular` folder. Feel free to grab it, clone it, or fork it. [Instructions on running it are in its readme](https://github.com/Priytam/auto/blob/master/exampleApp/readme.md).
+While this guide explains the *what*, *why* and *how*, I find it helpful to see them in practice. 
+This tool is accompanied by a sample application that follows basic usage.You can find the [sample application here](https://github.com/Priytam/auto/tree/master/exampleApp) 
+in the `exampleAPp` folder. Feel free to grab it, clone it, or fork it.
+[Instructions on running it are in its readme](https://github.com/Priytam/auto/blob/master/exampleApp/readme.md).
 
 ## Contribution is always welcome
 Create pull request against any bug or feature (raise one if doesn't exit). 
@@ -479,7 +478,7 @@ public class RedisServer extends AbstractTestComponent {
 }
 ```
 
-Test case life cycle will use your component implementation to do the following.
+Test case life cycle will use component implementation to do the following.
 * Start component before run (Restart if already running)
 * Clean component before run
 * run Test
@@ -532,8 +531,8 @@ installation directory from the configuration. For the configuration in detail s
 
 > One can also use host and port from configuration to start server on the specific host and port 
 
-A test case can have more than one component, return all components list from method getTestComponents() and framework will take care of 
-their life cycle.
+A test case can have more than one component, return all components list from method getTestComponents() and framework 
+will take care of their life cycle.
 
 [See complete implementation here](https://github.com/Priytam/auto/tree/master/exampleApp/src/main/java/com/auto/redis)
 
@@ -664,12 +663,15 @@ Refer below flow diagram for test case life cycle
 
 Framework provides enhanced assertion apis. 
 
-Suppose a test want to pool on an operation to get and validate data, and it is known that data may not come in first call but will obviously come 
-4 - 5 calls. Sounds complex but with Check api it is achievable in a single line. See below for example.
+Suppose a test want to poll on an operation(`fetchData()`) to get and validate `data != null`, and it is known that data 
+may not come in first call but will obviously come in 2, 3, 4 or 5th calls. Sounds complex but with Check api it is achievable
+in a single line. See below for example.
+ 
 > Check.assertBusyWait((data) -> null != data, () -> fetchData(), 4, 2, "data was null");
 
-fetchData() will be called till data is not null for 4 times in the interval of 2 seconds, even after data was null test will fail.
+call fetchData() until data != null for 4 times in the interval of 2 seconds, even after if data was null test will fail.
 
+***List of Assert api***
 * assertNotNull
 * assertNull
 * assertTrue
@@ -729,8 +731,8 @@ auto.json example
 **[Back to top](#table-of-contents)**
 
 ## Reporting and Test Execution
-When a test repository run in regression, reporting tests result in different channels also plays an important role.
-Framework provides TestsExecutor class to run tests in regression and can be used to configure for saving logs centrally and
+When a test repository runs in regression, reporting tests result to different channels also plays an important role.
+Framework provides TestsExecutor class to run tests in regression to configure for saving logs centrally and
 posting execution result on different channels.
 
 To use TestsExecutor create a class Runner with main method as below, in execute method on TestsExecutor provide the 
@@ -784,7 +786,7 @@ public class Runner {
 }
 ```
 
-To perform something before tests execution completes use withBeforeExecution(), like setting env variable
+To perform something before tests execution starts use withBeforeExecution(), like setting env variable
 ```java
 public class Runner {
         public static void main(String[] args) {
@@ -795,7 +797,7 @@ public class Runner {
 }
 ```
 
-To perform something after tests execution starts use withAfterExecution(), like saving test result to database
+To perform something after tests execution completes use withAfterExecution(), like saving test result to database
 ```java
 public class Runner {
     public static void main(String[] args) {
@@ -810,7 +812,7 @@ public class Runner {
 }
 ```
 
-To perform something on tests execution failure use withOnExecutionFailure(). similarly, onExecutionSuccess.
+To perform something on tests execution failure use withOnExecutionFailure(). similarly, withOnExecutionSuccess.
 ```java
 public class Runner {
 
@@ -822,7 +824,7 @@ public class Runner {
 }
 ```
 
-To perform something after each test execution starts use withOnTestCompletion(), like saving test result to database
+To perform something after each test execution completes use withOnTestCompletion(), like saving test result to database
 ```java
 public class Runner {
     public static void main(String[] args) {
