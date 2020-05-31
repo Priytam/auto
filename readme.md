@@ -52,12 +52,11 @@ P.S. your PR should also contain explanation of changes below
   1. [Reporting and Test Execution](#reporting-and-test-execution)
   1. [Build and Deployment](#build-and-deployment)
   1. [Mock Server](#mock-server)
-  1. [Annotations](#annotations)
+  1. [Annotations and custom rules](#annotations-and-custom-rules)
   1. [Example test cases](#example-test-cases)
   1. [Best Practices](#best-practices)
 
 ## Design
-
 
 ![FlowChart](doc/flow.png)
 
@@ -209,7 +208,7 @@ public class GetUserOp  extends AbstractHttpOperation {
 ```
 
 Add getUser method in ReqResServer
-```java
+```text
     public User getUser(int userId) {
         OpResult opResult = performOperation(new GetUserOp(getServer(), userId));
         if (CollectionUtils.isNotEmpty(opResult.getStdOut())) {
@@ -360,10 +359,9 @@ Creating redis component
      }
  }
   ```
-
 **Its clear now we need to provide below logic to component**
- * star Op
- * stop Op,
+ * start Operation
+ * stop Operation
  * clean component
  * is component running 
 
@@ -386,7 +384,6 @@ public class RedisStartOp extends AbstractCommandOperation {
     }
 }
 ```
-
 Stop Operation
 ```java
 public class RedisStopOp extends AbstractCommandOperation {
@@ -425,7 +422,6 @@ public class RedisFlushDbOperation extends AbstractCommandOperation {
     }
 }
 ```
-
 ping operation
 ```java
 public class RedisPingOperation extends AbstractCommandOperation {
@@ -647,41 +643,89 @@ public class RedisFlushDbOperation extends AbstractCommandOperation {
 
 Use OperationFactory to make method call as operation for example
 
-```java
+```text
     OperationFactory.consumableOp(() -> {
             wireMockServer = new WireMockServer(getPort());
             wireMockServer.start();
             WireMock.configureFor(getHost(), wireMockServer.port());
        }, "MockServerStart");
 ```
-
-
 **[Back to top](#table-of-contents)**
 
 ## Life cycle
 
-```java
-  public class test() {
-  }
-```
-**[Back to top](#table-of-contents)**
+Refer below flow diagram for test case life cycle
 
+![Life Cycle](doc/lifecycleflow.png)
+
+**[Back to top](#table-of-contents)**
 
 ## Checks
 
-  ```java
-  public class test() {
-  }
-  ```
+Framework provides enhanced assertion apis. 
+
+Suppose a test want to pool on an operation to get and validate data, and it is known that data may not come in first call but will obviously come 
+4 - 5 calls. Sounds complex but with Check api it is achievable in a single line. See below for example.
+> Check.assertBusyWait((data) -> null != data, () -> fetchData(), 4, 2, "data was null");
+
+fetchData() will be called till data is not null for 4 times in the interval of 2 seconds, even after data was null test will fail.
+
+* assertNotNull
+* assertNull
+* assertTrue
+* assertFalse
+* assertEquals
+* assertEqualsIgnoreCase
+* assertPathEquals
+* assertNotEquals
+* assertMatches
+* assertBetween
+* assertNotBetween
+* assertLessThan
+* assertGreaterThan
+* assertBetweenNotEqualTo
+* assertContainsIgnoreSpaces
+* assertContains
+* assertNotContains
+* assertContainsOneOf
+* assertContainsAllOf
+* assertCollectionsEqualIgnoreOrder
+* assertDoubleEquals
+* assertBusyWait
+* checkBusyWaitTrueForXTime
+
 **[Back to top](#table-of-contents)**
 
-
 ## Configuration
+Application information (host, port, hostname, installationDir, logDir) and recourse folder (for mocked json and 
+other test data) can be configured in resource folder of repository with a file named `auto.json`
 
-  ```java
-  public class test() {
-  }
-  ```
+auto.json example
+```text
+ {
+   "resourcePath": "/tmp/resources",
+   "applications": [
+     {
+       "name": "ReqRes",
+       "server": "https://reqres.in",
+       "logDir": "/var/log/tomcat7/catalina.out"
+     },
+     {
+       "name": "RedisServer",
+       "host": "localhost",
+       "port": "3487",
+       "installationDir": "/usr/home/bin",
+       "logDir": "/var/log/mockserver.log"
+     },
+     {
+       "name": "Mock Server",
+       "host": "localhost",
+       "port": "3487",
+       "logDir": "/var/log/mockserver.log"
+     }
+   ]
+ }
+```
 **[Back to top](#table-of-contents)**
 
 ## Reporting and Test Execution
@@ -803,6 +847,10 @@ Test log directory contains
 * operation folder with files for each operation 
 * test.log file
 * content folder with files if test dumped something for debugging purpose
+
+TestExecutor provides a progress bar indicating progress of test execution and Tests result in the console.
+
+![Console output](doc/runnerconsolereport.png)
   
 **[Back to top](#table-of-contentss)**
 
@@ -832,38 +880,21 @@ your repository
 **[Back to top](#table-of-contents)**
 
 ## Mock-Server
-
-  ```java
-  public class test() {
-  }
-  ```
+`Work in progerss`
 **[Back to top](#table-of-contents)**
 
-## Annotations
-
-  ```java
-  public class test() {
-  }
-  ```
+## Annotations and custom rules
+`Work in progerss`
 **[Back to top](#table-of-contents)**
 
 ## Running command on remote server
-
 `Work in progerss`
-
 **[Back to top](#table-of-contents)**
 
 ## Example test cases
-
-  ```java
-  public class test() {
-  }
-  ```
+`Work in progerss`
+**[Back to top](#table-of-contents)**
 
 ## Best Practices
-
-  ```java
-  public class test() {
-  }
-  ```
+`Work in progerss`
 **[Back to top](#table-of-contents)**

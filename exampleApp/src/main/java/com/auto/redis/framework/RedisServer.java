@@ -47,4 +47,12 @@ public class RedisServer extends AbstractTestComponent {
     public void prepare() {
 
     }
+
+    public void put(String testKey, String testValue) {
+
+    }
+
+    public String get(String testKey) {
+        return null;
+    }
 }

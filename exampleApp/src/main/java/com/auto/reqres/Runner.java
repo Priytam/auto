@@ -6,7 +6,7 @@ public class Runner {
 
     public static void main(String[] args) {
         new TestsExecutor()
-                .withOnExecutionFailure((e -> System.out.println(e.getMessage())))
+                .withTestRetryCount(2)
                 .execute("com.auto.reqres.tests");
     }
 }
