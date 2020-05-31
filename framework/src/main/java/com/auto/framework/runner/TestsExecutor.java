@@ -24,6 +24,7 @@ import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 /**
@@ -51,7 +52,7 @@ public class TestsExecutor {
     private final List<Consumer<ExecutionResult>> reportConsumers = Lists.newArrayList();
     private boolean mailReportEnabled = false;
     private MailConfig mailConfig;
-    private List<MailTemplateBuilder.TableBuilder> tableBuilders;
+    private Function<ExecutionResult, List<MailTemplateBuilder.TableBuilder>> tablesBuilderFunction;
     private Consumer<TestJobResult> onTestCompletion;
     private Consumer<? super Path> testLogDirHandler;
 
@@ -80,10 +81,6 @@ public class TestsExecutor {
 
     private void init() {
         System.setProperty(RegressionEnvironment.REGRESSION.name(), "true");
-        reportConsumers.add(new ConsoleReporter());
-        if (mailReportEnabled) {
-            reportConsumers.add(new MailReporter(mailConfig, tableBuilders));
-        }
     }
 
     private Collection<String> buildTests(String packagePrefix) {
@@ -138,9 +135,11 @@ public class TestsExecutor {
     }
 
     private void report(ExecutionResult executionResult) {
-        reportConsumers.parallelStream().forEach(consumer -> {
-            consumer.accept(executionResult);
-        });
+        reportConsumers.add(new ConsoleReporter());
+        if (mailReportEnabled) {
+            reportConsumers.add(new MailReporter(mailConfig, tablesBuilderFunction.apply(executionResult)));
+        }
+        reportConsumers.parallelStream().forEach(consumer -> consumer.accept(executionResult));
     }
 
     public TestsExecutor withTestListBuilder(TestListBuilder builder) {
@@ -184,8 +183,8 @@ public class TestsExecutor {
         return this;
     }
 
-    public TestsExecutor withMailTablesBuilder(List<MailTemplateBuilder.TableBuilder> tableBuilders) {
-        this.tableBuilders = tableBuilders;
+    public TestsExecutor withMailTablesBuilder(Function<ExecutionResult, List<MailTemplateBuilder.TableBuilder>> tablesBuilderFunction) {
+        this.tablesBuilderFunction = tablesBuilderFunction;
         return this;
     }
 

@@ -51,4 +51,17 @@ public class TestJobResult {
     public JobStatus getStatus() {
         return status;
     }
+
+    @Override
+    public String toString() {
+        return "TestJobResult{" +
+                "pass=" + pass +
+                ", time='" + time + '\'' +
+                ", name='" + name + '\'' +
+                ", className='" + className + '\'' +
+                ", fqcn='" + fqcn + '\'' +
+                ", errorMessage='" + errorMessage + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

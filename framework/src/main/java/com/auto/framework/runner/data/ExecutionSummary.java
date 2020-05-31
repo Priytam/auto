@@ -40,4 +40,13 @@ public class ExecutionSummary {
     public void setFatal(int fatal) {
         this.fatal = fatal;
     }
+
+    @Override
+    public String toString() {
+        return "ExecutionSummary{" +
+                "pass=" + pass +
+                ", fail=" + fail +
+                ", fatal=" + fatal +
+                '}';
+    }
 }

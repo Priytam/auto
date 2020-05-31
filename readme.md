@@ -20,7 +20,7 @@ Below points may interests you using this tool
 * Easy deployable and ready to run regression
 * Capable of stopping and starting and cleaning components at every test run
 * Abstraction of http api, commandline and webApi operation to write tests faster
-* usable utils (Json, Xml, File etc.)
+* Usable utils (Json, Xml, File etc.)
 
 ### Need support using this tool in your org
 Don't hesitate to write me a mail at `(mrpjpandey@gmail.com with the topic need help)`, and I will help you for free.
@@ -49,13 +49,12 @@ P.S. your PR should also contain explanation of changes below
   1. [Life Cycle](#life-cycle)
   1. [Checks](#checks)
   1. [Configuration](#configuration)
-  1. [Example test cases](#example-test-cases)
-  1. [Reporting](#reporting)
+  1. [Reporting and Test Execution](#reporting-and-test-execution)
   1. [Build and Deployment](#build-and-deployment)
   1. [Mock Server](#mock-server)
   1. [Annotations](#annotations)
+  1. [Example test cases](#example-test-cases)
   1. [Best Practices](#best-practices)
-  1. [Modularity](#modularity)
 
 ## Design
 
@@ -685,28 +684,151 @@ Use OperationFactory to make method call as operation for example
   ```
 **[Back to top](#table-of-contents)**
 
-## Example test cases
+## Reporting and Test Execution
+When a test repository run in regression, reporting tests result in different channels also plays an important role.
+Framework provides TestsExecutor class to run tests in regression and can be used configure for saving logs centrally,
+posting execution result on different channels.
 
-  ```java
-  public class test() {
-  }
-  ```
-**[Back to top](#table-of-contents)**
+To use TestsExecutor create a class Runner with main method as below, in execute method on TestsExecutor provide the 
+name of package where tests are written. To run only specific class provide `fully qualified class name`.
+```java
+public class Runner {
 
-## Reporting
+    public static void main(String[] args) {
+        new TestsExecutor()
+                .execute("com.auto.reqres.tests");
+    }
+}
+```
 
-  ```java
-  public class test() {
-  }
-  ```
+To enable reporting test results via mail use withEnableMail()
+```java
+
+public class Runner {
+    public static void main(String[] args) {
+        InputStream in = Runner.class.getResourceAsStream("/mailconfig.json");
+        new TestsExecutor()
+                .withEnableMail(JsonUtil.serialize(in, MailConfig.class))
+                .execute("com.auto.reqres.tests");
+    }
+}
+```
+In send custom tables in mail report use withMailTablesBuilder()
+```java
+public class Runner {
+    public static void main(String[] args) {
+        new TestsExecutor()
+                .withMailTablesBuilder((Runner::prepareCustomeTable))
+                .execute("com.auto.reqres.tests");
+    }
+
+    private static List<MailTemplateBuilder.TableBuilder> prepareCustomeTable(ExecutionResult executionResult) {
+        return Lists.newArrayList();
+    }
+}
+```
+
+To retry if test fails use withTestRetryCount()
+```java
+public class Runner {
+
+    public static void main(String[] args) {
+        new TestsExecutor()
+                .withTestRetryCount(1)
+                .execute("com.auto.reqres.tests");
+    }
+}
+```
+
+To perform something before tests execution starts use withBeforeExecution(), like setting env variable
+```java
+public class Runner {
+        public static void main(String[] args) {
+            new TestsExecutor()
+                    .withBeforeExecution((testList) -> testList.forEach(testName -> setEnv(testName)))
+                    .execute("com.auto.reqres.tests");
+        }
+}
+```
+
+To perform something after tests execution starts use withAfterExecution(), like saving test result to database
+```java
+public class Runner {
+    public static void main(String[] args) {
+        new TestsExecutor()
+                .withAfterExecution((executionResult) -> {
+                    save(executionResult.getSummary());
+                    save(executionResult.getJobResults());
+                    save(executionResult.getTestList());
+                })
+                .execute("com.auto.reqres.tests");
+    }
+}
+```
+
+To perform something on tests execution failure use withOnExecutionFailure(). similarly, onExecutionSuccess.
+```java
+public class Runner {
+
+    public static void main(String[] args) {
+        new TestsExecutor()
+                .withOnExecutionFailure((e -> System.out.println(e.getMessage())))
+                .execute("com.auto.reqres.tests");
+    }
+}
+```
+
+To perform something after each test execution starts use withOnTestCompletion(), like saving test result to database
+```java
+public class Runner {
+    public static void main(String[] args) {
+        new TestsExecutor()
+                .withOnTestCompletion((testJobResult -> System.out.println(testJobResult)))
+                .execute("com.auto.reqres.tests");
+    }
+}
+```
+
+To perform something on test log directory user , like saving log files in central cloud db
+```java
+public class Runner {
+    public static void main(String[] args) {
+        new TestsExecutor()
+                .withLogFileHandler((path -> System.out.println(path.getFileName())))
+                .execute("com.auto.reqres.tests");
+    }
+}
+```
+Test base directory contains 
+* operation folder with files for each operation 
+* test.log file
+* content folder with files if test dumped something for debugging purpose
+  
 **[Back to top](#table-of-contentss)**
 
 ## Build and Deployment
 
-  ```java
-  public class test() {
+Build, deploy and running a test repository in regression environment is very important part. This framework use Runner 
+main class we saw above to run tests in regression. To build repository must create fat jar so that framework classes 
+will be available in the current jar classpath.
+
+put below code in `build.gradle` of test repository to create fat jar and replace Main-class value with Runner class of
+your repository
+  ```groovy
+  jar {
+      manifest {
+          attributes 'Main-Class': 'com.auto.reqres.Runner'
+      }
+      from {
+          (configurations.runtime).collect { it.isDirectory() ? it : zipTree(it) } } {
+          exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+      }
   }
-  ```
+ ```
+> run ./gradlew build
+> find jar in build/libs
+> and run java -jar <name-of-jar>.jar
+
 **[Back to top](#table-of-contents)**
 
 ## Mock-Server
@@ -731,15 +853,14 @@ Use OperationFactory to make method call as operation for example
 
 **[Back to top](#table-of-contents)**
 
-## Best Practices
+## Example test cases
 
   ```java
   public class test() {
   }
   ```
-**[Back to top](#table-of-contents)**
 
-## Modularity
+## Best Practices
 
   ```java
   public class test() {

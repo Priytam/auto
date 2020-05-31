@@ -7,14 +7,6 @@ version '1.0'
 
 repositories {
     mavenCentral()
-    maven {
-        url "${ARTIFACTORY_URL}/${ARTIFACTORY_REPO}"
-        credentials {
-            username = "${ARTIFACTORY_USERNAME}"
-            password = "${ARTIFACTORY_PASSWORD}"
-        }
-        name = "artifactory"
-    }
 }
 
 jar {

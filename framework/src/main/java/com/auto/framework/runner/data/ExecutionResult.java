@@ -25,7 +25,20 @@ public class ExecutionResult {
         return summary;
     }
 
+    public String getTestList() {
+        return testList;
+    }
+
     public List<TestJobResult> getJobResults() {
         return jobResults;
+    }
+
+    @Override
+    public String toString() {
+        return "ExecutionResult{" +
+                "testList='" + testList + '\'' +
+                ", summary=" + summary +
+                ", jobResults=" + jobResults +
+                '}';
     }
 }
