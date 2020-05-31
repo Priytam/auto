@@ -23,6 +23,11 @@ public class OperationFactory {
             }
 
             @Override
+            public OpRequest getRequest() {
+                return caller::toString;
+            }
+
+            @Override
             public OpResult getResult() {
                 return new OpResult() {
                     @Override

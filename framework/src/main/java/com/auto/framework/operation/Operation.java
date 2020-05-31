@@ -9,6 +9,8 @@ package com.auto.framework.operation;
 public interface Operation {
     void execute();
 
+    OpRequest getRequest();
+
     OpResult getResult();
 
     boolean shouldRunInBackground();

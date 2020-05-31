@@ -7,5 +7,5 @@ package com.auto.framework.operation;
  * email: mrpjpandey@gmail.com
  */
 public interface Caller {
-    public void call();
+    void call();
 }

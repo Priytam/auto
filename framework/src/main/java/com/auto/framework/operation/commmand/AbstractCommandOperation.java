@@ -80,4 +80,9 @@ public abstract class AbstractCommandOperation implements Operation {
     public void setEnv(String name, String val) {
         mpEnv.put(name, val);
     }
+
+    @Override
+    public CommandRequest getRequest() {
+        return request;
+    }
 }

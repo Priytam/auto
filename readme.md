@@ -543,19 +543,106 @@ A test case can have more than one component, we can provide all component list 
 **[Back to top](#table-of-contents)**
 
 ## Operations
+We have seen and created operation in previous sections. Currently, framework provides implementations of three types of 
+operations HttpApi, CommandLine and WebAction. It is easy to write custom operation as well
 
-  ```java
+It is advised that a test case should always communicate components via operations, this helps in zero test 
+maintainability. Let's say for example your application is changed from ROR to SpringBoot and hence way of start and stop
+, in this scenario we only need to change our start stop operations and all tests will start running as it is.
 
-  ```
+## Custom operation
+To create an Operation need to do the following.
+* Custom operation should implement Operation class
+* Provide OpRequest instance with proper command name, as it used to create a file to log operation trace
+* execute method of Operation should create an instance of OpResult
+
+`See Api, Comamnd line operation for underating how to write custom operation`
+
+## Api operations
+To create a HttpApi Operation extend class from AbstractHttpOperation for example
+
+```java
+public class GetUserOp  extends AbstractHttpOperation {
+
+    private final String baseUrl;
+    private final int userId;
+    private final static String USER_ENDPOINT = "/api/users/";
+
+    public GetUserOp(String baseUrl, int userId) {
+        this.baseUrl = baseUrl;
+        this.userId = userId;
+    }
+
+    @Override
+    protected HttpRequestBuilder getHttpRequestBuilder() {
+        return new HttpRequestBuilder()
+                .withBaseUrl(baseUrl + USER_ENDPOINT + userId)
+                .withApiName("getUser")
+                .withMimeType(MimeTypes.APPLICATION_JSON)
+                .withRequestType(HttpMethods.GET);
+    }
+
+    @Override
+    public boolean shouldRunInBackground() {
+        return false;
+    }
+
+    @Override
+    public String getName() {
+        return "GetUserOp";
+    }
+}
+```
+
+* To run HttpApiOperation in background return true from shouldRunInBackground()
+* Apiname is used to make operation file name to log operation trace
+* Default timeout in one minutes, override getTimeout() method for custom timeout
+* Execution of HttpApiOperation will return instance of HttpOpResponse(OpResult's child).
+* HttpRequestBuilder is user to build HttpOpRequest(OpRequest's child)
+
+## Commandline operations
+
+
+To create command based operation extend class AbstractCommandOperation
+```java
+public class RedisFlushDbOperation extends AbstractCommandOperation {
+
+    public RedisFlushDbOperation(String installationDir) {
+        super(installationDir, new CommandRequest(new String[]{"redis-cli", "flushdb"}));
+    }
+
+    @Override
+    public boolean shouldRunInBackground() {
+        return false;
+    }
+
+    @Override
+    public String getName() {
+        return "RedisPingOp";
+    }
+}
+```
+* To run CommandOperation in background return true from shouldRunInBackground()
+* First word of command will be used to make operation file name to log operation trace
+* Default timeout is one minutes, override getTimeout() method for custom timeout
+* Execution of CommandOperation will return instance of CommandResult (OpResult's child).
+* To run command on a remote host create CommandRequest(OpRequest's child)
+ instance with host name (see [Running Remotely](#running-command-on-remote-server) for more detail)
+* Always provide installation directory (binary of command) of command as in different machines they 
+might be installed in a different directory (`/usr/bin` on one machine and `/user/app/bin` on other machine)
+
+
+## WebUi Operations
+`Development is still in progress`
+
 **[Back to top](#table-of-contents)**
-
 
 ## Life cycle
 
-  ```java
+```java
   public class test() {
   }
-  ```
+```
 **[Back to top](#table-of-contents)**
 
 
@@ -614,6 +701,12 @@ A test case can have more than one component, we can provide all component list 
   public class test() {
   }
   ```
+**[Back to top](#table-of-contents)**
+
+## Running command on remote server
+
+`Work in progerss`
+
 **[Back to top](#table-of-contents)**
 
 ## Best Practices

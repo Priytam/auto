@@ -1,6 +1,5 @@
 package com.auto.framework.operation.http;
 
-import com.auto.framework.operation.OpResult;
 import com.auto.framework.operation.Operation;
 import com.google.common.collect.Lists;
 
@@ -15,6 +14,7 @@ import java.util.Collections;
  */
 public abstract class AbstractHttpOperation implements Operation {
     private HttpOpResponse response;
+    private HttpOpRequest request;
 
     @Override
     public void execute() {
@@ -28,13 +28,13 @@ public abstract class AbstractHttpOperation implements Operation {
     private void executeHttp() {
         long startTime = System.currentTimeMillis();
         try {
-            HttpOpRequest build = getHttpRequestBuilder().build();
-            build.sendRequest();
+            request = getHttpRequestBuilder().build();
+            request.sendRequest();
             long endTime = System.currentTimeMillis();
-            if (build.getStatusCode() == HttpURLConnection.HTTP_OK || build.getStatusCode() == HttpURLConnection.HTTP_CREATED || build.getStatusCode() == HttpURLConnection.HTTP_ACCEPTED) {
-                response = new HttpOpResponse(build.getStatusCode(), Lists.newArrayList(build.getOutput().toString()), Collections.emptyList(), endTime - startTime);
+            if (request.getStatusCode() == HttpURLConnection.HTTP_OK || request.getStatusCode() == HttpURLConnection.HTTP_CREATED || request.getStatusCode() == HttpURLConnection.HTTP_ACCEPTED) {
+                response = new HttpOpResponse(request.getStatusCode(), Lists.newArrayList(request.getOutput().toString()), Collections.emptyList(), endTime - startTime);
             } else {
-                response = new HttpOpResponse(build.getStatusCode(), Collections.emptyList(), Lists.newArrayList(build.getOutput().toString()), endTime - startTime);
+                response = new HttpOpResponse(request.getStatusCode(), Collections.emptyList(), Lists.newArrayList(request.getOutput().toString()), endTime - startTime);
             }
         } catch (Exception e) {
             long endTime = System.currentTimeMillis();
@@ -43,8 +43,13 @@ public abstract class AbstractHttpOperation implements Operation {
     }
 
     @Override
-    public OpResult getResult() {
+    public HttpOpResponse getResult() {
         return response;
+    }
+
+    @Override
+    public HttpOpRequest getRequest() {
+        return request;
     }
 
     protected abstract HttpRequestBuilder getHttpRequestBuilder();
