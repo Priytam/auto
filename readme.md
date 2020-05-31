@@ -540,7 +540,7 @@ installation directory from the configuration. For the configuration in detail s
 A test case can have more than one component, return all components list from method getTestComponents() and framework will take care of 
 their life cycle.
 
-[See Complete implementation here](#https://github.com/Priytam/auto/tree/master/exampleApp/src/main/java/com/auto/redis)
+[See complete implementation here](https://github.com/Priytam/auto/tree/master/exampleApp/src/main/java/com/auto/redis)
 
 
 **[Back to top](#table-of-contents)**
