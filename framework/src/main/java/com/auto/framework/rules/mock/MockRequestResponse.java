@@ -1,5 +1,7 @@
 package com.auto.framework.rules.mock;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.lang.annotation.*;
 
 /**
@@ -15,7 +17,6 @@ public @interface MockRequestResponse {
     RequestType type() default RequestType.GET;
     String url();
     String responsePath();
-    String requestPath();
+    String requestPath() default StringUtils.EMPTY;
     int withDelay() default 0;
-
 }

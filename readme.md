@@ -874,13 +874,110 @@ your repository
   }
  ```
 > run ./gradlew build
+
 > find jar in build/libs
+
 > and run java -jar <name-of-jar>.jar
 
 **[Back to top](#table-of-contents)**
 
 ## Mock-Server
-`Work in progerss`
+
+To use mock Server you need to add an instance of mockServer in your testCase class initComponents method
+
+```java
+public class ReqResWithMockServerTestCase extends AbstractTestCase {
+
+    private ReqResServer server;
+    private MockServer mockServer;
+
+    protected ReqResWithMockServerTestCase() {
+        super("ReqRes");
+    }
+
+    @Override
+    protected void initComponents() {
+        AutoConf.Application currentApplicationConfig = getCurrentApplicationConfig();
+        TestComponentData testComponentData = new TestComponentData.Builder()
+                .build(currentApplicationConfig.getServer(), currentApplicationConfig.getLogDir());
+        server = new ReqResServer(testComponentData);
+
+        AutoConf.Application mock_server = getConfigForApp("Mock Server");
+        TestComponentData build = new TestComponentData.Builder().build(mock_server.getHost(), mock_server.getPort(), mock_server.getLogDir());
+        mockServer = new MockServer(build, mockRequestResponseRule.getConfig());
+    }
+
+    @Override
+    public List<? extends ITestComponent> getTestComponents() {
+        TestReporter.TRACE("init example components");
+        List<ITestComponent> lstComponents = new ArrayList<>();
+        lstComponents.add(server);
+        return lstComponents;
+    }
+
+
+    public ReqResServer getServer() {
+        return server;
+    }
+
+    public MockServer getMockServer() {
+        return mockServer;
+    }
+}
+```
+
+Configure mock-sever in auto.json
+```text
+{
+  "resourcePath": "/tmp/resources",
+  "applications": [
+    {
+      "name": "ReqRes",
+      "server": "https://reqres.in",
+      "logDir": "/var/log/tomcat7/catalina.out"
+    },
+    {
+      "name": "Mock Server",
+      "host": "localhost",
+      "port": "3487",
+      "logDir": "/var/log/mockserver.log"
+    }
+  ]
+}
+```
+
+Write tests with mocked api like this
+```java
+public class BasicMockServerTestCase extends ReqResWithMockServerTestCase {
+
+    @Test
+    @MockRequestResponse(
+            url = "https://reqres.in/api/users?page=23",
+            responsePath = "path/to/response.json",
+            type = RequestType.GET
+    )
+    public void testWithMockServer() {
+
+    }
+}
+```
+
+```java
+public class BasicMockServerTestCase extends ReqResWithMockServerTestCase {
+    @Test
+    @MockRequestResponse(
+            url = "https://reqres.in/api/users?page=23",
+            requestPath = "path/to/request.json",
+            type = RequestType.POST,
+            responsePath = "path/to/response.json",
+            withDelay = 10
+    )
+    public void testWithMockServer() {
+
+    }
+}
+```
+
 **[Back to top](#table-of-contents)**
 
 ## Annotations and custom rules

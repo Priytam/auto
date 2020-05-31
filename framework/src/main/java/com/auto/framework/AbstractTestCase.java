@@ -2,10 +2,10 @@ package com.auto.framework;
 
 import com.auto.framework.auto.AutoConf;
 import com.auto.framework.env.TestEnvironment;
-import com.auto.framework.reporter.data.TestDataReporter;
 import com.auto.framework.iface.ITestCase;
 import com.auto.framework.iface.ITestComponent;
 import com.auto.framework.reporter.TestReporter;
+import com.auto.framework.reporter.data.TestDataReporter;
 import com.auto.framework.rules.error.HaltOnErrorRule;
 import com.auto.framework.rules.logging.KeepLogRule;
 import com.auto.framework.rules.mock.MockRequestResponseRule;
@@ -291,5 +291,12 @@ public abstract class AbstractTestCase implements ITestCase {
 
     private void finishReporter() {
         TestReporter.finish();
+    }
+
+    protected AutoConf.Application getConfigForApp(String appName) {
+        if (CollectionUtils.isEmpty(config.getApplications()) || config.getApplications().stream().noneMatch(a -> getCurrentApplication().equals(appName))) {
+            TestReporter.FATAL("config file doesn't have application : " + appName);
+        }
+        return config.getApplications().stream().filter(a -> a.getName().equals(appName)).findAny().get();
     }
 }
