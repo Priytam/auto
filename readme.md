@@ -1,4 +1,4 @@
-# Enhanced Automation tool
+# Enhanced Automation Tool (eat)
 
 ## Purpose
 *To write automated tests for api, web page and command line based application*
