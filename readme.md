@@ -713,7 +713,7 @@ public class Runner {
     }
 }
 ```
-In send custom tables in mail report use withMailTablesBuilder()
+To send custom tables in mail report use withMailTablesBuilder()
 ```java
 public class Runner {
     public static void main(String[] args) {
