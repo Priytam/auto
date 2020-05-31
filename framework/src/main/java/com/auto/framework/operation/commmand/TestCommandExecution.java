@@ -26,28 +26,50 @@ public class TestCommandExecution {
         mpDefaultEnv.put("TZ", TimeZone.getDefault().getID());
     }
 
-    public static CommandResult runCommand(String... s) {
-        String join = String.join(" ", s);
-        CommandRequest cRequest = new CommandRequest(s);
-        CommandResult commandResult = runCommand(join, generateCompEnvironment());
-        TestReporter.traceExecution(cRequest, commandResult);
-        return commandResult;
-    }
-
     public static CommandResult runCommandWithoutTrace(String... s) {
-        String join = String.join(" ", s);
         CommandRequest cRequest = new CommandRequest(s);
-        return runCommand(join, generateCompEnvironment());
+        CommandRunner commandRunner = new CommandRunner(generateCompEnvironment());
+        commandRunner.runCommand(cRequest);
+        return commandRunner.getCommandResult();
     }
 
-    public static CommandResult runCommand(String[] arrCmd, String mHost) {
-        String join = String.join(" ", arrCmd);
-        CommandRequest cRequest = new CommandRequest(arrCmd, mHost);
-        CommandResult commandResult = runCommand(join);
-        TestReporter.traceExecution(cRequest, commandResult);
-        return commandResult;
+    public static CommandResult runCommand(String... arrCmd) {
+        CommandRequest cRequest = new CommandRequest(arrCmd);
+        CommandRunner commandRunner = new CommandRunner(generateCompEnvironment());
+        commandRunner.runCommand(cRequest);
+        TestReporter.traceExecution(cRequest, commandRunner.getCommandResult());
+        return commandRunner.getCommandResult();
     }
 
+    public static CommandResult runCommand(String[] arrCmd, String host) {
+        CommandRequest cRequest = new CommandRequest(arrCmd, host);
+        CommandRunner commandRunner = new CommandRunner(generateCompEnvironment());
+        commandRunner.runCommand(cRequest);
+        TestReporter.traceExecution(cRequest, commandRunner.getCommandResult());
+        return commandRunner.getCommandResult();
+    }
+
+    public static CommandResult runCommand(String[] arrCmd, Map<String, String> mapEnv) {
+        CommandRequest cRequest = new CommandRequest(arrCmd);
+        Map<String, String> env = generateCompEnvironment();
+        env.putAll(mapEnv);
+        CommandRunner commandRunner = new CommandRunner(env);
+        commandRunner.runCommand(cRequest);
+        TestReporter.traceExecution(cRequest, commandRunner.getCommandResult());
+        return commandRunner.getCommandResult();
+    }
+
+    public static CommandResult runCommand(String[] arrCmd, Map<String, String> mapEnv, String host) {
+        CommandRequest cRequest = new CommandRequest(arrCmd, host);
+        Map<String, String> env = generateCompEnvironment();
+        env.putAll(mapEnv);
+        CommandRunner commandRunner = new CommandRunner(env);
+        commandRunner.runCommand(cRequest);
+        TestReporter.traceExecution(cRequest, commandRunner.getCommandResult());
+        return commandRunner.getCommandResult();
+    }
+
+    //TODO
     public static CommandResult runCommandInteractively(String[] toArray, String sHost, long commandTimeout) {
         return null;
     }
@@ -94,38 +116,4 @@ public class TestCommandExecution {
     public static void SetDefaultEnv(String sKey, String sValue) {
         mpDefaultEnv.put(sKey, sValue);
     }
-
-
-    //TODO use command process
-    private static CommandResult runCommand(String command, Map<String, String> env) {
-
-        List<String> listsResult = Lists.newArrayList();
-        List<String> listsError = Lists.newArrayList();
-        long timeTaken = 0;
-        long startTime = System.currentTimeMillis();
-        try {
-            Process start = Runtime.getRuntime().exec(command);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(start.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                listsResult.add(line);
-            }
-
-            reader = new BufferedReader(new InputStreamReader(start.getErrorStream()));
-            String error;
-            while ((error = reader.readLine()) != null) {
-                listsError.add(error);
-            }
-            int exitVal = start.waitFor();
-            long endTime = System.currentTimeMillis();
-            timeTaken = endTime - startTime;
-            return new CommandResult(exitVal, listsResult, listsError, timeTaken);
-
-        } catch (Exception e) {
-            long endTime = System.currentTimeMillis();
-            timeTaken = endTime - startTime;
-            return new CommandResult(-500, Collections.emptyList(), Lists.newArrayList(e.getMessage()), timeTaken);
-        }
-    }
-
 }

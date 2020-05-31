@@ -8,11 +8,15 @@ package com.auto.framework.iface;
  */
 public interface ITestComponent {
     void start();
+
     void stop();
+
     void restart();
+
     boolean isRunning();
 
     String getHost();
+
     int getPort();
 
     String getLogDir();
@@ -22,6 +26,10 @@ public interface ITestComponent {
     String getServer();
 
     String getComponentName();
+
     void clean(boolean bForce);
+
     void prepare();
+
+    String getInstallationDir();
 }

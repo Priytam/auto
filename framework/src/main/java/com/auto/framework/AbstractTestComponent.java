@@ -19,12 +19,14 @@ public abstract class AbstractTestComponent implements ITestComponent {
     private final String logDir;
     private static final int NUMBER_OF_TIMES_TRY_TO_START = 5;
     private final String server;
+    private String installationDir;
 
     protected AbstractTestComponent(TestComponentData data) {
         this.host = data.getHost();
         this.port = data.getPort();
         this.logDir = data.getLogDir();
         this.server = data.getServer();
+        this.installationDir = data.getInstallationDir();
     }
 
     @Override
@@ -128,5 +130,10 @@ public abstract class AbstractTestComponent implements ITestComponent {
     @Override
     public int getPort() {
         return port;
+    }
+
+    @Override
+    public String getInstallationDir() {
+        return installationDir;
     }
 }

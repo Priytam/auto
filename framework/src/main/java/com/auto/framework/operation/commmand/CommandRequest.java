@@ -1,6 +1,7 @@
 package com.auto.framework.operation.commmand;
 
 import com.auto.framework.operation.OpRequest;
+import com.google.common.base.Joiner;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -43,9 +44,16 @@ public class CommandRequest implements OpRequest {
 
     @Override
     public String getCommandName() {
-        if (arrCommand.length <= 0 || StringUtils.isBlank(arrCommand[0])) {
+        if (null == arrCommand || arrCommand.length <= 0 || StringUtils.isBlank(arrCommand[0])) {
             return "UNKNOWN";
         }
         return arrCommand[0].split(" ")[0].replace("/", "_");
+    }
+
+    public String getFullCommand() {
+        if (null == arrCommand || arrCommand.length <= 0 || StringUtils.isBlank(arrCommand[0])) {
+            return StringUtils.EMPTY;
+        }
+        return String.join(" ", arrCommand);
     }
 }

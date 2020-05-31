@@ -90,11 +90,13 @@ helps in debugging. It has embedded mock server to mock third party api for test
 
 ## Getting Started
 
-It is very easy to start using this tool, let me explain the same using some example. We will write test to automate https://reqres.in/
-which have operations to
+It is easy to start using this tool, To use this you need to have java 8 or above installed in your system. (tested with java 9, 11, 14)
+
+Let me explain the same using some example. We will write test to automate https://reqres.in/ which have operations to
  * List users (https://reqres.in/api/users?page=2), 
  * Single User (https://reqres.in/api/users/2), 
  * Single User not found (https://reqres.in/api/users/23).
+
 
 
 Create a gradle/maven project and include auto framework as dependency
@@ -112,6 +114,13 @@ dependencies {
 </dependency>
 ```
 Here we have one component to test (reqres) by performing above three operations. Since we can't start stop this component.
+
+> So First we will be creating 
+> * one component, 
+> * a test case 
+> * an operation (above steps are one time effort) 
+ 
+> And then we can start writing tests
 
 Component will be AlwaysRunningComponent
 ```java
@@ -267,10 +276,202 @@ Let's see the content of file (content is obvious no need to explain).
 
 ## Component
 
-  ```java
-  public class test() {
-  }
+In getting started section we got clear idea about all three verticals. Component is an application under test. A testcase 
+can have more than one component under testing, best practices is to mock third party tools if your component is using any.
+In regression environment we can trust on third party tool availability/stability, and your regression will always have 
+one or more failing testcase without any bug so mocking third party tool is only a way. ([see mock server for more info](#mock-server))
+
+> Always mock third party tool 
+
+Scenario where a testcase can have more that on components.Suppose your application is using redis for caching then you 
+will have (Redis, Application) as two components. In this example your test can interact with redis via commandline 
+interface to check cached data correctness.
+
+Best practices in regression says that every test 
+* Should start/restart component before test run (help in bringing you app to zero state)
+* Should clean all changes made by other test in component before test run (flush db, clear cache)
+* Should clean all changes made in component after run (flush db, clear cache).
+* Should stop component after test run
+
+See [Test case Life Cycle](#life-cycle) to understand how auto framework handle above practices
+
+Above practices helps in avoiding test failure because of any changes made by any previous test which was not supposed to
+be in this test in regression env we can't guess which test ran before this.
+
+> Test should clean and start/stop component before and after run
+
+To create a component we need to know start/stop commands of application. Let's see an example of creating a component which
+test redis server
+
+> redis-server to start redis
+> redis-cli shutdown to stop
+> redis-cli ping to check if running
+  
+Creating redis component
+```java
+ public class RedisServer extends AbstractTestComponent {
+     
+     protected RedisServer(TestComponentData data) {
+         super(data);
+     }
+ 
+     @Override
+     protected Operation getStartOperation() {
+         return null;
+     }
+ 
+     @Override
+     protected Operation getStopOperation() {
+         return null;
+     }
+ 
+     @Override
+     public boolean isRunning() {
+         return false;
+     }
+ 
+     @Override
+     public void clean(boolean bForce) {
+ 
+     }
+ 
+     @Override
+     public void prepare() {
+ 
+     }
+ }
   ```
+
+**Its clear now we need to provide below component**
+ * star Op
+ * stop Op,
+ * clean component
+ * is running  component 
+
+Start Operation
+```java
+public class RedisStartOp extends AbstractCommandOperation {
+
+    public RedisStartOp(String installationDir) {
+        super(installationDir, new CommandRequest(new String[] {"redis-server"}));
+    }
+
+    @Override
+    public boolean shouldRunInBackground() {
+        return true;
+    }
+
+    @Override
+    public String getName() {
+        return "RedisStartOp";
+    }
+}
+```
+
+Stop Operation
+```java
+public class RedisStopOp extends AbstractCommandOperation {
+
+    public RedisStopOp(String installationDir) {
+        super(installationDir, new CommandRequest(new String[] {"redis-cli", "shutdown"}));
+    }
+
+    @Override
+    public boolean shouldRunInBackground() {
+        return false;
+    }
+
+    @Override
+    public String getName() {
+        return "RedisStopOp";
+    }
+}
+```
+Clean operation
+```java
+public class RedisFlushDbOperation extends AbstractCommandOperation {
+
+    public RedisFlushDbOperation(String installationDir) {
+        super(installationDir, new CommandRequest(new String[]{"redis-cli", "flushdb"}));
+    }
+
+    @Override
+    public boolean shouldRunInBackground() {
+        return false;
+    }
+
+    @Override
+    public String getName() {
+        return "RedisPingOp";
+    }
+}
+```
+
+ping operation
+```java
+public class RedisPingOperation extends AbstractCommandOperation {
+
+
+    public RedisPingOperation(String installationDir) {
+        super(installationDir, new CommandRequest(new String[]{"redis-cli", "ping"}));
+    }
+
+    @Override
+    public boolean shouldRunInBackground() {
+        return false;
+    }
+
+    @Override
+    public String getName() {
+        return "RedisPingOp";
+    }
+}
+```
+
+Now our component will look like this
+```java
+public class RedisServer extends AbstractTestComponent {
+
+    protected RedisServer(TestComponentData data) {
+        super(data);
+    }
+
+    @Override
+    protected Operation getStartOperation() {
+        return new RedisStartOp(getInstallationDir());
+    }
+
+    @Override
+    protected Operation getStopOperation() {
+        return new RedisStopOp(getInstallationDir());
+    }
+
+    @Override
+    public boolean isRunning() {
+        OpResult opResult = performOperation(new RedisPingOperation(getInstallationDir()));
+        return CollectionUtils.isNotEmpty(opResult.getStdOut()) && opResult.getStdOut().contains("PONG");
+    }
+
+    @Override
+    public void clean(boolean bForce) {
+        performOperation(new RedisFlushDbOperation(getInstallationDir()));
+    }
+
+    @Override
+    public void prepare() {
+
+    }
+}
+```
+
+Test case life cycle will use you component implementation to do the following.
+* Start component before run (Restart if already running)
+* Clean component before run
+* run Test
+* Clean component after run
+* Stop component
+See [Test case Life Cycle](#life-cycle) for more details.
+
 **[Back to top](#table-of-contents)**
 
 ## Test Case
@@ -290,7 +491,7 @@ Let's see the content of file (content is obvious no need to explain).
 **[Back to top](#table-of-contents)**
 
 
-## Operations
+## Life cycle
 
   ```java
   public class test() {

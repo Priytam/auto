@@ -5,6 +5,7 @@ import com.auto.framework.operation.Operation;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 import static com.google.common.collect.Maps.newHashMap;
 
@@ -21,17 +22,23 @@ public abstract class AbstractCommandOperation implements Operation {
     private long commandTimeout = TestCommandExecution.DEFAULT_COMMAND_TIMEOUT;
     private Map<String, String> mpEnv = newHashMap();
 
-    public AbstractCommandOperation() {
-        this("", new CommandRequest(new String[0]));
-    }
-
     public AbstractCommandOperation(String installationDir, CommandRequest commandRequest) {
         this.installationDir = installationDir;
         this.request = commandRequest;
+        mpEnv.put("TZ", TimeZone.getDefault().getID());
+    }
+
+    public AbstractCommandOperation(String installationDir, CommandRequest commandRequest, Map<String, String> mapEnvVariable) {
+        this.installationDir = installationDir;
+        this.request = commandRequest;
+        mpEnv.put("TZ", TimeZone.getDefault().getID());
+        mpEnv.putAll(mapEnvVariable);
     }
 
     @Override
     public void execute() {
+        CommandRunner commandRunner = new CommandRunner(getEnv(), getInstallationDir(), getCommandTimeout(), getCWD());
+        commandRunner.runCommand(request);
         rResult = TestCommandExecution.runCommand(request.getCommand(), request.getHost() /*getCommandTimeout(), getEnv(), shouldRunInBackground(), getCWD()*/);
     }
 
