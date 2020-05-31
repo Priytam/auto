@@ -42,9 +42,9 @@ P.S. your PR should also contain explanation of changes below
   1. [Test Case](#test-case)
   1. [Operations](#operations)
         * [Custom Operation](#custom-operation)
-        * [Api Operations](#api-opration)
-        * [Commandline Operations](#commandline-opration)
-        * [WebUi Operations](#webui-opration)
+        * [Api Operations](#api-operations)
+        * [Commandline Operations](#commandline-operations)
+        * [WebUi Operations](#webui-operations)
         * [Method call as operations](#use-method-call-as-operations)
   1. [Life Cycle](#life-cycle)
   1. [Checks](#checks)
@@ -553,6 +553,8 @@ It is advised that a test case should always communicate components via operatio
 maintainability`. Let's say for example your application is changed from ROR to SpringBoot and hence way of start and stop
 are changed, in this scenario it is only need to change start stop operations and all tests will start running as it was.
 
+**[Back to top](#table-of-contents)**
+
 ## Custom operation
 To create an Operation need to do the following.
 * Custom operation should implement Operation class
@@ -560,6 +562,8 @@ To create an Operation need to do the following.
 * execute method of Operation should create an instance of OpResult
 
 `See Api, Comamnd line operation for underating how to write custom operation`
+
+**[Back to top](#table-of-contents)**
 
 ## Api operations
 To create a HttpApi Operation extend class from AbstractHttpOperation for example
@@ -603,8 +607,9 @@ public class GetUserOp  extends AbstractHttpOperation {
 * Execution of HttpApiOperation will return instance of HttpOpResponse(OpResult's child).
 * HttpRequestBuilder is user to build HttpOpRequest(OpRequest's child)
 
-## Commandline operations
+**[Back to top](#table-of-contents)**
 
+## Commandline operations
 
 To create command based operation extend class AbstractCommandOperation
 ```java
@@ -630,15 +635,26 @@ public class RedisFlushDbOperation extends AbstractCommandOperation {
 * Default timeout is one minutes, override getTimeout() method for custom timeout
 * Execution of CommandOperation will return instance of CommandResult (OpResult's child).
 * To run command on a remote host create CommandRequest(OpRequest's child)
- instance with host name (see [Running Remotely](#running-command-on-remote-server) for more detail)
+  instance with host name (see [Running Remotely](#running-command-on-remote-server) for more detail)
 * Always provide installation directory (binary of command) of command as in different machines they 
-might be installed in a different directory (`/usr/bin` on one machine and `/user/app/bin` on other machine)
+  might be installed in a different directory (`/usr/bin` on one machine and `/user/app/bin` on other machine)
 
+**[Back to top](#table-of-contents)**
 
 ## WebUi Operations
 `Development is still in progress`
 
 ## Use method call as operations
+
+Use OperationFactory to make method call as operation for example
+
+```java
+    OperationFactory.consumableOp(() -> {
+            wireMockServer = new WireMockServer(getPort());
+            wireMockServer.start();
+            WireMock.configureFor(getHost(), wireMockServer.port());
+       }, "MockServerStart");
+```
 
 
 **[Back to top](#table-of-contents)**
