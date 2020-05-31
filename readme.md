@@ -686,7 +686,7 @@ Use OperationFactory to make method call as operation for example
 
 ## Reporting and Test Execution
 When a test repository run in regression, reporting tests result in different channels also plays an important role.
-Framework provides TestsExecutor class to run tests in regression and can be used configure for saving logs centrally,
+Framework provides TestsExecutor class to run tests in regression and can be used to configure for saving logs centrally and
 posting execution result on different channels.
 
 To use TestsExecutor create a class Runner with main method as below, in execute method on TestsExecutor provide the 
