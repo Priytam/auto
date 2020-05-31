@@ -6,33 +6,33 @@ Special thanks to Sugam Agarwal, Vipul Popli for contribution.
 ## Purpose
 *To write automated tests for api, web ui and command line based application*
 
-Below points may interesets you using this tool
+Below points may interests you using this tool
 
-* Embedded Mock server
+* Embedded mock server
 * Easy to write tests
 * Zero test case maintainability
 * Clean teardown
-* Advanced assertion api
-* Advance rules
-* Keep Logs of every action performed on server 
+* Clean test case life cycle
+* Advance/enhanced assertion api
+* Advance/enhanced rules
+* Clean test log and Keep logs of every action performed on server 
 * Highly configurable reporting
 * Easy deployable and ready to run regression
-* Capable of stopping and starting components at every test run
-* clean component 
-* Abstraction of api , commandline and webApi operation to write tests faster
+* Capable of stopping and starting and cleaning components at every test run
+* Abstraction of http api, commandline and webApi operation to write tests faster
 * usable utils (Json, Xml, File etc.)
 
 ### Need support using this tool in your org
-Don't hesitate to write me a mail at (mrpjpandey@gmail.com with topic need Help) and I will help you for free.
+Don't hesitate to write me a mail at `(mrpjpandey@gmail.com with the topic need help)`, and I will help you for free.
 
 ## See it in action in a Sample App
-While this guide explains the *what*, *why* and *how*, I find it helpful to see them in practice. This tool is accompanied by a sample application that follows basic usage . You can find the [sample application (named exampleApp) here](https://github.com/Priytam/auto/tree/master/exampleApp) in the `modular` folder. Feel free to grab it, clone it, or fork it. [Instructions on running it are in its readme](https://github.com/Priytam/auto/blob/master/exampleApp/readme.md).
+While this guide explains the *what*, *why* and *how*, I find it helpful to see them in practice. This tool is accompanied by a sample application that follows basic usage.
+You can find the [sample application (named exampleApp) here](https://github.com/Priytam/auto/tree/master/exampleApp) in the `modular` folder. Feel free to grab it, clone it, or fork it. [Instructions on running it are in its readme](https://github.com/Priytam/auto/blob/master/exampleApp/readme.md).
 
 ## Contribution is always welcome
-Create pull request against any bug or feature (raise one if doesnot exit). After reviewing it I will merge your PR and add your name in contributors list.
-
-Add new feature docs in table of contents
-
+Create pull request against any bug or feature (raise one if doesn't exit). 
+After reviewing it I will merge your PR and add your name in contributors list. 
+P.S. your PR should also contain explanation of changes below
 
 ## Table of Contents
 
