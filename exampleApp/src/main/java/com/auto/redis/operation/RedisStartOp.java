@@ -17,7 +17,7 @@ public class RedisStartOp extends AbstractCommandOperation {
 
     @Override
     public boolean shouldRunInBackground() {
-        return false;
+        return true;
     }
 
     @Override

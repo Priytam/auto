@@ -1,6 +1,7 @@
 package com.auto.reqres.tests;
 
 import com.auto.framework.check.Check;
+import com.auto.framework.utils.ThreadUtils;
 import com.auto.reqres.framework.ReqResTestCase;
 import com.auto.reqres.model.User;
 import org.junit.Test;

@@ -12,6 +12,6 @@ public class Runner {
         InputStream in = Runner.class.getResourceAsStream("/mailconfig.json");
         new TestsExecutor()
                 .withEnableMail(JsonUtil.serialize(in, MailConfig.class))
-                .execute("com.auto.example.tests");
+                .execute("com.auto.reqres.tests");
     }
 }

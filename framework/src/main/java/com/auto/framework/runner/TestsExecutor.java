@@ -10,17 +10,21 @@ import com.auto.framework.runner.job.TestJob;
 import com.auto.framework.runner.job.TestJobResult;
 import com.auto.framework.runner.job.TestJobRetryHandler;
 import com.auto.framework.runner.mail.MailConfig;
+import com.auto.framework.runner.mail.MailTemplateBuilder;
 import com.auto.framework.runner.report.ConsoleReporter;
 import com.auto.framework.runner.report.MailReporter;
 import com.auto.framework.runner.testlist.TestListBuilder;
 import com.auto.framework.runner.testlist.TestListBuilderImpl;
-import com.auto.framework.runner.mail.MailTemplateBuilder;
 import com.google.common.collect.Lists;
 import org.apache.log4j.Logger;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 /**
  * User: Priytam Jee Pandey
@@ -44,11 +48,12 @@ public class TestsExecutor {
     private Consumer<ExecutionResult> afterExecution = (result) -> System.out.println("***Shutting down test executor");
     private Consumer<Exception> onExecutionFailure = (result) -> System.out.println("**Test executed failed");
     private Consumer<ExecutionResult> onExecutionSuccess = (result) -> System.out.println("**Test successfully executed");
-    private List<Consumer<ExecutionResult>> reportConsumers = Lists.newArrayList();
+    private final List<Consumer<ExecutionResult>> reportConsumers = Lists.newArrayList();
     private boolean mailReportEnabled = false;
     private MailConfig mailConfig;
     private List<MailTemplateBuilder.TableBuilder> tableBuilders;
     private Consumer<TestJobResult> onTestCompletion;
+    private Consumer<? super Path> testLogDirHandler;
 
     public void execute(String packagePrefix) {
         init();
@@ -100,8 +105,19 @@ public class TestsExecutor {
 
     private void onTestCompletion(TestJobResult result) {
         calculatePassFail();
+        handleLogFile();
         if (null != onTestCompletion) {
             onTestCompletion.accept(result);
+        }
+    }
+
+    private void handleLogFile() {
+        if (null != testLogDirHandler) {
+            try (Stream<Path> paths = Files.walk(Paths.get(TestReporter.getOutputDir()))) {
+                paths.forEach(testLogDirHandler);
+            } catch (Exception e) {
+
+            }
         }
     }
 
@@ -175,6 +191,11 @@ public class TestsExecutor {
 
     public TestsExecutor withOnTestCompletion(Consumer<TestJobResult> onTestCompletion) {
         this.onTestCompletion = onTestCompletion;
+        return this;
+    }
+
+    public TestsExecutor withLogFileHandler(Consumer<Path> testLogHandler) {
+        this.testLogDirHandler = testLogHandler;
         return this;
     }
 }

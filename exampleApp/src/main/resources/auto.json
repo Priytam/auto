@@ -7,6 +7,13 @@
       "logDir": "/var/log/tomcat7/catalina.out"
     },
     {
+      "name": "RedisServer",
+      "host": "localhost",
+      "port": "3487",
+      "installationDir": "/usr/home/bin",
+      "logDir": "/var/log/mockserver.log"
+    },
+    {
       "name": "Mock Server",
       "host": "localhost",
       "port": "3487",
