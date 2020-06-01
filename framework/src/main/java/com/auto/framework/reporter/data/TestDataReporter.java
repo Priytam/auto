@@ -26,7 +26,7 @@ public class TestDataReporter {
     }
 
     public static void addData(String sKey, Double sValue) {
-        TestReporter.TRACE("Adding data : sKey:" + sKey + " sValue:" + sValue);
+        TestReporter.TRACE("Adding data : {" + sKey + "=" + sValue + "}");
         testData.put(sKey, new TestDataReporterItem(sKey, sValue));
     }
 

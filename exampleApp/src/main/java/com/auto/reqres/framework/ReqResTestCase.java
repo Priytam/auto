@@ -18,6 +18,7 @@ import java.util.List;
 public class ReqResTestCase extends AbstractTestCase {
 
     private ReqResServer server;
+    private ArrayList<ITestComponent> lstComponents;
 
     protected ReqResTestCase() {
         super("ReqRes");
@@ -29,13 +30,12 @@ public class ReqResTestCase extends AbstractTestCase {
         TestComponentData testComponentData = new TestComponentData.Builder()
                 .build(currentApplicationConfig.getServer(), currentApplicationConfig.getLogDir());
         server = new ReqResServer(testComponentData);
+        lstComponents = new ArrayList<>();
+        lstComponents.add(server);
     }
 
     @Override
     public List<? extends ITestComponent> getTestComponents() {
-        TestReporter.TRACE("init example components");
-        List<ITestComponent> lstComponents = new ArrayList<>();
-        lstComponents.add(server);
         return lstComponents;
     }
 

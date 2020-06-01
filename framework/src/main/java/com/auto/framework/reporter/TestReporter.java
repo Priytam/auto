@@ -70,7 +70,7 @@ public class TestReporter {
         testCase = tTest;
         initOutputDir();
         initAppenders();
-        TraceLink("INIT: running with base dir ", tTest.getSandBoxDir());
+        TraceLink("INIT: running with base dir", tTest.getSandBoxDir());
         TRACE("Java home: " + System.getProperty("java.home"));
         initErrorReporter();
     }
@@ -88,11 +88,11 @@ public class TestReporter {
             FileUtil.delete(getOutputDir());
         } else {
             reporter.dump();
-            TraceLink("LOCAL BUGS DIR: ", getOutputDir());
+            TraceLink("TEST DIR: ", getOutputDir());
         }
 
         logMessage("END: " + getTestCase().getTestName());
-        logMessage(ConsoleStyle.YELLOW  + ConsoleStyle.BOLD + "TEST_REPORT:: " + reporter.getPass() + " PASSED " + reporter.getFail() + " FAILED " + reporter.getFatal() + " FATAL" + ConsoleStyle.RESET);
+        logMessage("TEST_REPORT: " + ConsoleStyle.YELLOW  + ConsoleStyle.BOLD + (testFailed() ?   " FAILED " + ConsoleStyle.CROSS : " PASSED " + ConsoleStyle.TICK) + ConsoleStyle.RESET);
 
         if (testFailed()) {
             if (testFailedNoFatal()) {
@@ -174,7 +174,7 @@ public class TestReporter {
     }
 
     public static void TraceLink(String sMessage, String link) {
-        logMessage(sMessage + " " + "file://" + link);
+        logMessage(sMessage + ": file://" + link);
     }
 
     private static void logMessage(String sMessage) {
@@ -274,9 +274,5 @@ public class TestReporter {
         for (TestReporterAppender appender : appenders.values()) {
             appender.traceExecution(request);
         }
-    }
-
-    public static void load() {
-
     }
 }

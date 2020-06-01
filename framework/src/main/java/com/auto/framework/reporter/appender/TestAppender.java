@@ -1,12 +1,13 @@
 package com.auto.framework.reporter.appender;
 
+import com.auto.framework.CustomTestRunner;
+import com.auto.framework.operation.OpResult;
 import com.auto.framework.operation.commmand.CommandRequest;
+import com.auto.framework.operation.http.HttpOpRequest;
 import com.auto.framework.reporter.TestReporter;
 import com.auto.framework.reporter.iface.IOutputFileStrategy;
 import com.auto.framework.reporter.iface.TestReporterAppender;
-import com.auto.framework.CustomTestRunner;
-import com.auto.framework.operation.OpResult;
-import com.auto.framework.operation.http.HttpOpRequest;
+import com.auto.framework.runner.console.ConsoleStyle;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -74,7 +75,7 @@ public class TestAppender implements TestReporterAppender {
                 if (ste[i].getClassName().equals(TestReporter.class.getName())) {
                     continue;
                 }
-                if (!ste[i].getClassName().startsWith("ct.air.")) {
+                if (!ste[i].getClassName().startsWith("com.auto.")) {
                     break;
                 }
                 sException += "\n\tat " + ste[i].getClassName() + "." + ste[i].getMethodName() + "(" + ste[i].getFileName() + ":" + ste[i].getLineNumber() + ")";
@@ -93,15 +94,19 @@ public class TestAppender implements TestReporterAppender {
     @Override
     public void traceExecution(CommandRequest cRequest, OpResult rResult) {
         String sCommandResultPath = dumpCommandResults(cRequest, rResult);
-        logMessage("executed command " + iCommandNum + ": " + String.join(" ", cRequest.getCommand()), false);
-        logMessage("result in: file://" + sCommandResultPath, false);
+        log.info("\n-");
+        logMessage(ConsoleStyle.decorate(ConsoleStyle.CYAN ,"executed command " + iCommandNum) + ": " + String.join(" ", cRequest.getCommand()), false);
+        logMessage(ConsoleStyle.decorate(ConsoleStyle.CYAN, "result in:") + " file://" + sCommandResultPath, false);
+        log.info("\n-");
     }
 
     @Override
     public void traceExecution(HttpOpRequest request) {
         String sResultPath = dumpWebResults(request.getCommandName(), request.getUrl().toString(), request.getContent(), request.getStatusCode(), request.getOutput().toString());
-        logMessage("executed request " + request.getUrl(), false);
-        logMessage("result in file " + " file://" + sResultPath, false);
+        log.info("\n-");
+        logMessage(ConsoleStyle.decorate(ConsoleStyle.CYAN, "executed api: ") + request.getUrl(), false);
+        logMessage(ConsoleStyle.decorate(ConsoleStyle.CYAN,"result in: ") + " file://" + sResultPath, false);
+        log.info("\n-");
     }
 
     private synchronized String dumpCommandResults(CommandRequest cRequest, OpResult rResult) {

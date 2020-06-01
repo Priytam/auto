@@ -25,4 +25,7 @@ public class ConsoleStyle {
     public static final String CLOSE_BRACKET = "\uFE5E"; //CLOSE_BRACKET
     public static final String STAR = "\uFE61";
 
+    public static String decorate(String style, String message) {
+        return style + message + RESET;
+    }
 }

@@ -1,7 +1,7 @@
 package com.auto.framework.operation.commmand;
 
-import com.auto.framework.operation.OpResult;
 import com.auto.framework.operation.Operation;
+import com.auto.framework.reporter.TestReporter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,10 +17,11 @@ import static com.google.common.collect.Maps.newHashMap;
  */
 public abstract class AbstractCommandOperation implements Operation {
     private final CommandRequest request;
-    private String installationDir;
-    protected CommandResult rResult = null;
+    private final String installationDir;
+    private final Map<String, String> mpEnv = newHashMap();
     private long commandTimeout = TestCommandExecution.DEFAULT_COMMAND_TIMEOUT;
-    private Map<String, String> mpEnv = newHashMap();
+    protected CommandResult result = null;
+    private String cwd;
 
     public AbstractCommandOperation(String installationDir, CommandRequest commandRequest) {
         this.installationDir = installationDir;
@@ -37,28 +38,49 @@ public abstract class AbstractCommandOperation implements Operation {
 
     @Override
     public void execute() {
-        CommandRunner commandRunner = new CommandRunner(getEnv(), getInstallationDir(), getCommandTimeout(), getCWD());
-        commandRunner.runCommand(request);
-        rResult = TestCommandExecution.runCommand(request.getCommand(), request.getHost() /*getCommandTimeout(), getEnv(), shouldRunInBackground(), getCWD()*/);
+        if (shouldRunInBackground()) {
+            new Thread(this::prepareAndExecute).start();
+        } else {
+            prepareAndExecute();
+        }
     }
 
     @Override
-    public OpResult getResult() {
-        return rResult;
+    public CommandRequest getRequest() {
+        return request;
+    }
+
+    @Override
+    public CommandResult getResult() {
+        return result;
+    }
+
+    private void prepareAndExecute() {
+        try {
+            CommandRunner commandRunner = new CommandRunner(getEnv(), getInstallationDir(), getCommandTimeout(), getCWD());
+            commandRunner.runCommand(request);
+            result = commandRunner.getCommandResult();
+        }  finally {
+            TestReporter.traceExecution(request, result);
+        }
     }
 
     protected String getCWD() {
-        return installationDir;
+        return cwd;
+    }
+
+    public void setCwd(String cwd) {
+        this.cwd = cwd;
     }
 
     protected Map<String, String> getEnv() {
-        HashMap<String, String> $ = newHashMap(TestCommandExecution.generateCompEnvironment());
-        $.putAll(mpEnv);
-        return $;
+        HashMap<String, String> map = newHashMap(TestCommandExecution.generateCompEnvironment());
+        map.putAll(mpEnv);
+        return map;
     }
 
-    public CommandResult executeInteractive() {
-        return TestCommandExecution.runCommandInteractively(request.getCommand(), request.getHost(), getCommandTimeout());
+    public void setEnv(String name, String val) {
+        mpEnv.put(name, val);
     }
 
     public String getInstallationDir() {
@@ -77,12 +99,5 @@ public abstract class AbstractCommandOperation implements Operation {
         return commandTimeout;
     }
 
-    public void setEnv(String name, String val) {
-        mpEnv.put(name, val);
-    }
 
-    @Override
-    public CommandRequest getRequest() {
-        return request;
-    }
 }

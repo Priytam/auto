@@ -12,26 +12,25 @@ import com.auto.framework.operation.OpResult;
  */
 public class TestConsoleAppender extends TestAppender {
 
-    private boolean m_bStartOfLine = true;
-    private static ThreadLocal<CheckData> m_checkData = new ThreadLocal<CheckData>();
-    private CommandRequest m_lastRequest;
-    private OpResult m_lastResult;
-    private int m_CountMissed = 0;
+    private boolean startOfLine = true;
+    private static ThreadLocal<CheckData> checkData = new ThreadLocal<CheckData>();
+    private CommandRequest lastRequest;
+    private OpResult lastResult;
 
     public TestConsoleAppender(IOutputFileStrategy strategy) {
         super(strategy);
     }
 
     public static CheckData getCheckData() {
-        if (null == m_checkData.get()) {
-            m_checkData.set(new CheckData());
+        if (null == checkData.get()) {
+            checkData.set(new CheckData());
         }
-        return m_checkData.get();
+        return checkData.get();
     }
 
     @Override
     public void logMessage(String sMessage, boolean bError) {
-        if (!m_bStartOfLine) {
+        if (!startOfLine) {
             handlePreviousPrint();
         }
         if (!bError) {
@@ -44,11 +43,11 @@ public class TestConsoleAppender extends TestAppender {
 
     private void handlePreviousPrint() {
         System.out.print("\n");
-        CommandRequest request = m_lastRequest;
-        m_lastRequest = null;
-        OpResult result = m_lastResult;
-        m_lastResult = null;
-        m_bStartOfLine = true;
+        CommandRequest request = lastRequest;
+        lastRequest = null;
+        OpResult result = lastResult;
+        lastResult = null;
+        startOfLine = true;
         if (null != request) {
             int commandNum = getCommandNum();
             setCommandNum(commandNum - 1);
@@ -64,10 +63,9 @@ public class TestConsoleAppender extends TestAppender {
         } else {
             incrementCommandNum();
             System.out.print(".");
-            m_bStartOfLine = false;
-            m_lastRequest = cRequest;
-            m_lastResult = rResult;
-
+            startOfLine = false;
+            lastRequest = cRequest;
+            lastResult = rResult;
         }
     }
 

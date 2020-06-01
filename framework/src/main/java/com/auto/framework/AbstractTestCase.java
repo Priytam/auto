@@ -9,6 +9,7 @@ import com.auto.framework.reporter.data.TestDataReporter;
 import com.auto.framework.rules.error.HaltOnErrorRule;
 import com.auto.framework.rules.logging.KeepLogRule;
 import com.auto.framework.rules.mock.MockRequestResponseRule;
+import com.auto.framework.runner.console.ConsoleStyle;
 import com.auto.framework.utils.FileUtil;
 import com.auto.framework.utils.JsonUtil;
 import com.auto.framework.utils.TestBaseDirectory;
@@ -64,8 +65,6 @@ public abstract class AbstractTestCase implements ITestCase {
     static {
         BasicConfigurator.configure();
         Logger.getRootLogger().setLevel(Level.INFO);
-        //fix for loading appenders early
-        TestReporter.load();
     }
 
     protected AutoConf config;
@@ -84,18 +83,26 @@ public abstract class AbstractTestCase implements ITestCase {
         startComponents();
         cleanComponents(true);
         prepareComponentsForExecution();
-        TestReporter.TRACE("============================= Normal Startup sequence finished");
+        TestReporter.TRACE(prepareTick() + "Startup sequence finished" + prepareTick());
         TestEnvironment.setReadyTime();
+    }
+
+    private String prepareTick() {
+        StringBuilder tick = new StringBuilder(" ");
+        for (int i = 0; i < 20; i++) {
+            tick.append(ConsoleStyle.TICK).append(" ");
+        }
+        return tick.toString();
     }
 
     protected void initConfiguration() {
         try {
             InputStream in = getClass().getResourceAsStream("/auto.json");
             config = JsonUtil.getObjectMapper().readValue(in, AutoConf.class);
-            if(StringUtils.isEmpty(config.getResourcePath())){
+            if (StringUtils.isEmpty(config.getResourcePath())) {
                 TestReporter.FATAL("config file doesn't have resource path");
             }
-            if(!FileUtil.exist(config.getResourcePath())){
+            if (!FileUtil.exist(config.getResourcePath())) {
                 TestReporter.TRACE("resource path doesn't exists, creating folder with path name " + config.getResourcePath());
                 new File(config.getResourcePath()).mkdirs();
             }
@@ -182,7 +189,7 @@ public abstract class AbstractTestCase implements ITestCase {
         try {
             setRunning(false);
             TestReporter.TRACE("tearDownComponents");
-            TestReporter.TRACE("============================= Test Completed TearDown Started=====================");
+            TestReporter.TRACE(prepareTick() + "Test completed starting teardown" + prepareTick());
             tearDownComponentsSpecific();
             TestReporter.TRACE("Cleaning On Test Finish");
             clean();
@@ -285,7 +292,7 @@ public abstract class AbstractTestCase implements ITestCase {
         return treeMap;
     }
 
-    public String getResourcePath(){
+    public String getResourcePath() {
         return config.getResourcePath();
     }
 

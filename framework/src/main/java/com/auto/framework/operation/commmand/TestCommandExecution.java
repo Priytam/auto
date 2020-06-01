@@ -14,7 +14,7 @@ import java.util.*;
  * email: mrpjpandey@gmail.com
  */
 public class TestCommandExecution {
-    public static final long DEFAULT_COMMAND_TIMEOUT = 1000;
+    public static final long DEFAULT_COMMAND_TIMEOUT = 60;
     private static Map<String, String> mpEnv = Collections.synchronizedMap(new HashMap<String, String>());
     private static Map<String, String> mpDefaultEnv = new HashMap<String, String>();
 
@@ -67,11 +67,6 @@ public class TestCommandExecution {
         commandRunner.runCommand(cRequest);
         TestReporter.traceExecution(cRequest, commandRunner.getCommandResult());
         return commandRunner.getCommandResult();
-    }
-
-    //TODO
-    public static CommandResult runCommandInteractively(String[] toArray, String sHost, long commandTimeout) {
-        return null;
     }
 
     public final static void reset() {

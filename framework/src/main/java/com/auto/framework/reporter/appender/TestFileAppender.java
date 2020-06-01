@@ -26,8 +26,7 @@ public class TestFileAppender extends TestAppender {
             FileWriter fFileWriter = new FileWriter(new File(sFileName), true);
             fFileWriter.append("Command " + getCommandNum() + ": " + String.join(" ", cRequest.getCommand()) + "\n");
             fFileWriter.append("CurrentTime: " + new Date() + "\n");
-            String sHost = getTargetHost(cRequest);
-            fFileWriter.append("Hostname: " + sHost + "\n");
+            fFileWriter.append("Hostname: " + cRequest.getHost() + "\n");
             fFileWriter.append("ExitStatus: " + rResult.getExitStatus() + "\n");
             fFileWriter.append("Stdout: " + String.join("\n", rResult.getStdOut()) + "\n");
             fFileWriter.append("Stderr: " + String.join("\n", rResult.getStdErr()) + "\n");
@@ -37,10 +36,6 @@ public class TestFileAppender extends TestAppender {
         }
     }
 
-    private String getTargetHost(CommandRequest cRequest) {
-        return cRequest.getHost();
-    }
-
     @Override
     protected void writeToFile(String sRequest, int iStatusCode, String bOutput, String sUrl, String sFileName) {
         try {
@@ -48,7 +43,8 @@ public class TestFileAppender extends TestAppender {
             fFileWriter.append("Url: " + sUrl + "\n");
             fFileWriter.append("Request " + getCommandNum() + ": " + sRequest + " " + "\n");
             fFileWriter.append("Response: " + bOutput + "\n");
-            fFileWriter.append("Response Code:" + iStatusCode + "\n");
+            fFileWriter.append("ResponseCode:" + iStatusCode + "\n");
+            fFileWriter.append("CurrentTime: " + new Date() + "\n");
             fFileWriter.close();
         } catch (Exception e) {
             logMessage("failed write to file", e);
