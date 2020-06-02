@@ -30,6 +30,7 @@ public class BasicTests extends ReqResTestCase {
     }
 
     @Test
+    @Tags(value = {"ABC-10","ABD-20"})
     public void adData() {
         User user = getServer().getUser(2);
         Check.assertNotNull(user.getAd(), "Ad was null");
