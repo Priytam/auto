@@ -35,4 +35,13 @@ public class TestDataReporterItem {
     public boolean shouldBeReported() {
         return toBeReported;
     }
+
+    @Override
+    public String toString() {
+        return "TestDataReporterItem{" +
+                "toBeReported=" + toBeReported +
+                ", sValue=" + sValue +
+                ", sKey='" + sKey + '\'' +
+                '}';
+    }
 }

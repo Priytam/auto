@@ -2,6 +2,7 @@ package com.auto.framework.runner;
 
 import com.auto.framework.env.RegressionEnvironment;
 import com.auto.framework.reporter.TestReporter;
+import com.auto.framework.reporter.data.TestDataReporter;
 import com.auto.framework.runner.console.progressbar.ProgressBar;
 import com.auto.framework.runner.console.progressbar.ProgressBarStyle;
 import com.auto.framework.runner.data.ExecutionResult;
@@ -69,7 +70,6 @@ public class TestsExecutor {
             onExecutionFailure(e);
         } finally {
             onExecutionSuccess(executionResult);
-            report(executionResult);
         }
         afterExecution(executionResult);
     }
@@ -124,6 +124,7 @@ public class TestsExecutor {
     }
 
     private void onExecutionSuccess(ExecutionResult executionResult) {
+        report(executionResult);
         onExecutionSuccess.accept(executionResult);
     }
 
