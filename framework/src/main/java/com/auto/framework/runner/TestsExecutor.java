@@ -23,6 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -137,7 +138,9 @@ public class TestsExecutor {
     private void report(ExecutionResult executionResult) {
         reportConsumers.add(new ConsoleReporter());
         if (mailReportEnabled) {
-            reportConsumers.add(new MailReporter(mailConfig, tablesBuilderFunction.apply(executionResult)));
+            MailReporter reporter = Objects.nonNull(tablesBuilderFunction)
+                    ? new MailReporter(mailConfig, tablesBuilderFunction.apply(executionResult)) :  new MailReporter(mailConfig);
+            reportConsumers.add(reporter);
         }
         reportConsumers.parallelStream().forEach(consumer -> consumer.accept(executionResult));
     }

@@ -20,13 +20,17 @@ import java.util.List;
  * email: mrpjpandey@gmail.com
  */
 public class MailReporter extends AbstractReporter {
-    private final List<MailTemplateBuilder.TableBuilder> tableBuilder;
+    private List<MailTemplateBuilder.TableBuilder> tableBuilder;
     boolean isMailSent = false;
     private MailConfig mailConfig;
 
     public MailReporter(MailConfig mailConfig, List<MailTemplateBuilder.TableBuilder> tableBuilders) {
         this.mailConfig = mailConfig;
         this.tableBuilder = tableBuilders;
+    }
+
+    public MailReporter(MailConfig mailConfig) {
+        this.mailConfig = mailConfig;
     }
 
     @Override
