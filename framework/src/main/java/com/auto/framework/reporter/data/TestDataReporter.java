@@ -30,6 +30,11 @@ public class TestDataReporter {
         testData.put(sKey, new TestDataReporterItem(sKey, sValue));
     }
 
+    public static void addData(String sKey, Object sValue, boolean shouldReport) {
+        TestReporter.TRACE("Adding data : {" + sKey + "=" + sValue + "}");
+        testData.put(sKey, new TestDataReporterItem(sKey, sValue, shouldReport));
+    }
+
     public static void addDataMap(String sKey, Map<String, String> itemMap) {
         try {
             itemMap.keySet().forEach(itemKey -> addData(getFullKey(sKey, itemKey), itemMap.get(itemKey)));
