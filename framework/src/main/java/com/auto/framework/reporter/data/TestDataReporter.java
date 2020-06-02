@@ -25,21 +25,19 @@ public class TestDataReporter {
         testData = Maps.newHashMap();
     }
 
-    public static void addData(String sKey, Double sValue) {
+    public static void addData(String sKey, Object sValue) {
         TestReporter.TRACE("Adding data : {" + sKey + "=" + sValue + "}");
         testData.put(sKey, new TestDataReporterItem(sKey, sValue));
     }
 
+    public static void addData(String sKey, Object sValue, boolean shouldReport) {
+        TestReporter.TRACE("Adding data : {" + sKey + "=" + sValue + "}");
+        testData.put(sKey, new TestDataReporterItem(sKey, sValue, shouldReport));
+    }
+
     public static void addDataMap(String sKey, Map<String, String> itemMap) {
         try {
-            for (String itemKey : itemMap.keySet()) {
-                double value = Double.parseDouble(itemMap.get(itemKey));
-                if (testData.containsKey(getFullKey(sKey, itemKey))) {
-                    testData.get(getFullKey(sKey, itemKey)).updateItem(value);
-                } else {
-                    addData(getFullKey(sKey, itemKey), value);
-                }
-            }
+            itemMap.keySet().forEach(itemKey -> addData(getFullKey(sKey, itemKey), itemMap.get(itemKey)));
         } catch (Exception e) {
             TestReporter.TRACE("Error while reporting " + itemMap + " for " + sKey + ": " + e.getMessage());
             e.printStackTrace();
@@ -53,5 +51,4 @@ public class TestDataReporter {
     public static List<TestDataReporterItem> getTestData() {
         return Lists.newArrayList(testData.values());
     }
-
 }

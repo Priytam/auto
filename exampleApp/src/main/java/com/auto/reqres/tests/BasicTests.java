@@ -1,7 +1,7 @@
 package com.auto.reqres.tests;
 
 import com.auto.framework.check.Check;
-import com.auto.framework.utils.ThreadUtils;
+import com.auto.framework.rules.tags.Tags;
 import com.auto.reqres.framework.ReqResTestCase;
 import com.auto.reqres.model.User;
 import org.junit.Test;
@@ -31,6 +31,15 @@ public class BasicTests extends ReqResTestCase {
 
     @Test
     public void adData() {
+        User user = getServer().getUser(2);
+        Check.assertNotNull(user.getAd(), "Ad was null");
+        Check.assertNotNull(user.getAd().getCompany(), "Ad company was null");
+        Check.assertEquals("StatusCode Weekly", user.getAd().getCompany(), "Incorrect company name");
+    }
+
+    @Test
+    @Tags(value = {"ABC-10","ABD-20"})
+    public void adDataWithTags() {
         User user = getServer().getUser(2);
         Check.assertNotNull(user.getAd(), "Ad was null");
         Check.assertNotNull(user.getAd().getCompany(), "Ad company was null");
