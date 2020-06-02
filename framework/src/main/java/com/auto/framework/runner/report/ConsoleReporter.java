@@ -53,6 +53,7 @@ public class ConsoleReporter extends AbstractReporter {
                 .flatMap(jobResult -> jobResult.getCustomTestData().stream())
                 .filter(TestDataReporterItem::shouldBeReported)
                 .map(item -> StringUtils.capitalize(item.getKey()))
+                .distinct()
                 .toArray(String[]::new);
         String[] headerColumns = Stream.of(DETAIL_COLUMN_NAMES, dynamicColumns).flatMap(Arrays::stream).toArray(String[]::new);
 
