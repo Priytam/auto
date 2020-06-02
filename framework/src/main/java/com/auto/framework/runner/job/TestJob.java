@@ -2,6 +2,7 @@ package com.auto.framework.runner.job;
 
 import com.auto.framework.reporter.ErrorReporter;
 import com.auto.framework.reporter.TestReporter;
+import com.auto.framework.reporter.data.TestDataReporter;
 
 import java.util.function.Consumer;
 
@@ -33,7 +34,7 @@ public class TestJob implements ITestJob {
         }
         long timeTaken = System.currentTimeMillis() - start;
         ErrorReporter errorReporter = TestReporter.getErrorReporter();
-        result = new TestJobResult(!TestReporter.testFailed(), getTime(timeTaken), getTestName(), getClassName(), fqcn, errorReporter.getFirstFailure(), status);
+        result = new TestJobResult(!TestReporter.testFailed(), getTime(timeTaken), getTestName(), getClassName(), fqcn, errorReporter.getFirstFailure(), status, TestDataReporter.getTestData());
     }
 
 

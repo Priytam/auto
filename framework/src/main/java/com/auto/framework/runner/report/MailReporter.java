@@ -1,17 +1,22 @@
 package com.auto.framework.runner.report;
 
 import com.auto.framework.env.TestEnvironment;
+import com.auto.framework.reporter.data.TestDataReporterItem;
 import com.auto.framework.runner.data.ExecutionResult;
 import com.auto.framework.runner.data.ExecutionSummary;
 import com.auto.framework.runner.job.TestJobResult;
 import com.auto.framework.runner.mail.MailConfig;
 import com.auto.framework.runner.mail.MailSender;
 import com.auto.framework.runner.mail.MailTemplateBuilder;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.mail.MessagingException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * User: Priytam Jee Pandey
@@ -58,14 +63,44 @@ public class MailReporter extends AbstractReporter {
     }
 
     private String buildDetailReport(List<TestJobResult> jobResults) {
+        String[] dynamicColumns = jobResults.stream()
+                .flatMap(jobResult -> jobResult.getCustomTestData().stream())
+                .filter(TestDataReporterItem::shouldBeReported)
+                .map(item -> StringUtils.capitalize(item.getKey()))
+                .toArray(String[]::new);
+        String[] headerColumns = Stream.of(DETAIL_COLUMN_NAMES, dynamicColumns).flatMap(Arrays::stream).toArray(String[]::new);
+
         List<String[]> rows = new ArrayList<>();
         for (TestJobResult result : jobResults) {
-            String[] strings = {result.getClassName(), result.getName(), result.isPass() ? "Pass" : "Fail", result.getErrorMessage()};
-            rows.add(strings);
+            String[] row = new String[headerColumns.length];
+            for (int i = 0; i < headerColumns.length; i++) {
+                String columnName = headerColumns[i];
+                if (columnName.equals("Class")) {
+                    row[i] = result.getClassName();
+                } else if (columnName.equals("Test")) {
+                    row[i] = result.getName();
+                } else if (columnName.equals("Status")) {
+                    row[i] = result.isPass() ? "Pass" : "Fail";
+                } else if (columnName.equals("Message")) {
+                    row[i] = result.getErrorMessage();
+                } else if (CollectionUtils.isNotEmpty(result.getCustomTestData())) {
+                    Optional<TestDataReporterItem> any = result
+                            .getCustomTestData()
+                            .stream()
+                            .filter(a -> columnName.equalsIgnoreCase(a.getKey()))
+                            .findAny();
+                    if (any.isPresent()) {
+                        row[i] = any.get().getValue().toString();
+                    } else {
+                        row[i] = StringUtils.EMPTY;
+                    }
+                }
+            }
+            rows.add(row);
         }
         return new MailTemplateBuilder.TableBuilder()
                 .withTitle("Regression detail report")
-                .withHeaders(DETAIL_COLUMN_NAMES)
+                .withHeaders(headerColumns)
                 .withRows(rows)
                 .build();
     }

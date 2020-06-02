@@ -1,5 +1,9 @@
 package com.auto.framework.runner.job;
 
+import com.auto.framework.reporter.data.TestDataReporterItem;
+
+import java.util.List;
+
 public class TestJobResult {
     private final boolean pass;
     private final String time;
@@ -8,8 +12,9 @@ public class TestJobResult {
     private final String fqcn;
     private final String errorMessage;
     private final JobStatus status;
+    private final List<TestDataReporterItem> customTestData;
 
-    public TestJobResult(boolean pass, String time, String name, String className, String fqcn, String errorMessage, JobStatus status) {
+    public TestJobResult(boolean pass, String time, String name, String className, String fqcn, String errorMessage, JobStatus status, List<TestDataReporterItem> customTestData) {
         this.pass = pass;
         this.time = time;
         this.name = name;
@@ -17,6 +22,7 @@ public class TestJobResult {
         this.fqcn = fqcn;
         this.errorMessage = errorMessage;
         this.status = status;
+        this.customTestData = customTestData;
     }
 
 
@@ -52,6 +58,10 @@ public class TestJobResult {
         return status;
     }
 
+    public List<TestDataReporterItem> getCustomTestData() {
+        return customTestData;
+    }
+
     @Override
     public String toString() {
         return "TestJobResult{" +
@@ -62,6 +72,7 @@ public class TestJobResult {
                 ", fqcn='" + fqcn + '\'' +
                 ", errorMessage='" + errorMessage + '\'' +
                 ", status=" + status +
+                ", customTestData=" + customTestData +
                 '}';
     }
 }
