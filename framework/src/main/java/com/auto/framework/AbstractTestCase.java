@@ -6,6 +6,7 @@ import com.auto.framework.iface.ITestCase;
 import com.auto.framework.iface.ITestComponent;
 import com.auto.framework.reporter.TestReporter;
 import com.auto.framework.reporter.data.TestDataReporter;
+import com.auto.framework.rules.tags.TagsRule;
 import com.auto.framework.rules.error.HaltOnErrorRule;
 import com.auto.framework.rules.logging.KeepLogRule;
 import com.auto.framework.rules.mock.MockRequestResponseRule;
@@ -61,6 +62,8 @@ public abstract class AbstractTestCase implements ITestCase {
     public HaltOnErrorRule haltOnErrorRule = new HaltOnErrorRule();
     @Rule
     public KeepLogRule keepLogRule = new KeepLogRule();
+    @Rule
+    public TagsRule tagsRule = new TagsRule();
 
     static {
         BasicConfigurator.configure();
@@ -82,9 +85,14 @@ public abstract class AbstractTestCase implements ITestCase {
         initComponents();
         startComponents();
         cleanComponents(true);
+        prepareTags();
         prepareComponentsForExecution();
         TestReporter.TRACE(prepareTick() + "Startup sequence finished" + prepareTick());
         TestEnvironment.setReadyTime();
+    }
+
+    private void prepareTags() {
+        TestDataReporter.addData("tags",tagsRule.getTags(), true);
     }
 
     private String prepareTick() {
