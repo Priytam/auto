@@ -1,11 +1,11 @@
 package com.auto.framework.operation.commmand;
 
 import com.auto.framework.reporter.TestReporter;
-import com.google.common.collect.Lists;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * User: Priytam Jee Pandey
@@ -14,9 +14,9 @@ import java.util.*;
  * email: mrpjpandey@gmail.com
  */
 public class TestCommandExecution {
-    public static final long DEFAULT_COMMAND_TIMEOUT = 60;
-    private static Map<String, String> mpEnv = Collections.synchronizedMap(new HashMap<String, String>());
-    private static Map<String, String> mpDefaultEnv = new HashMap<String, String>();
+    public static final long DEFAULT_COMMAND_TIMEOUT = 60 * 1000;
+    private static final Map<String, String> mpEnv = Collections.synchronizedMap(new HashMap<String, String>());
+    private static final Map<String, String> mpDefaultEnv = new HashMap<String, String>();
 
     static {
         initDefaultEnvMap();
@@ -69,7 +69,7 @@ public class TestCommandExecution {
         return commandRunner.getCommandResult();
     }
 
-    public final static void reset() {
+    public static void reset() {
         mpEnv.clear();
     }
 
@@ -88,7 +88,7 @@ public class TestCommandExecution {
         return mpUserEnv;
     }
 
-    public static void setenv(String sEnv, String sValue) {
+    public static void setEnv(String sEnv, String sValue) {
         if (null != sValue) {
             mpEnv.put(sEnv, sValue);
         } else {
@@ -97,15 +97,11 @@ public class TestCommandExecution {
     }
 
     public static void unSetEnv(String sEnv) {
-        if (mpEnv.containsKey(sEnv)) {
-            mpEnv.remove(sEnv);
-        }
+        mpEnv.remove(sEnv);
     }
 
     public static void unSetDefaultEnv(String sEnv) {
-        if (mpDefaultEnv.containsKey(sEnv)) {
-            mpDefaultEnv.remove(sEnv);
-        }
+        mpDefaultEnv.remove(sEnv);
     }
 
     public static void SetDefaultEnv(String sKey, String sValue) {

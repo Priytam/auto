@@ -19,6 +19,7 @@ public class HttpRequestBuilder {
     private HttpMethods eRequestType;
     private List<Header> header = new ArrayList<>();
     private String apiName;
+    private long timeOut = 60 * 1000;
 
     public class Header {
         public String key;
@@ -53,13 +54,18 @@ public class HttpRequestBuilder {
         return this;
     }
 
+    public HttpRequestBuilder withTimeout(long timeOut) {
+        this.timeOut = timeOut;
+        return this;
+    }
+
     public HttpRequestBuilder withRequestType(HttpMethods eRequestType) {
         this.eRequestType = eRequestType;
         return this;
     }
 
     public HttpOpRequest build() {
-        HttpOpRequest hRequest = new HttpOpRequest(baseUrl, eRequestType, apiName);
+        HttpOpRequest hRequest = new HttpOpRequest(baseUrl, eRequestType, apiName, (int)timeOut);
         hRequest.setContentType(eMimeType.toString());
         if (CollectionUtils.isNotEmpty(header)) {
             for (Header $ : header)

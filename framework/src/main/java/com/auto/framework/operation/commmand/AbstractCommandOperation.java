@@ -57,20 +57,12 @@ public abstract class AbstractCommandOperation implements Operation {
 
     private void prepareAndExecute() {
         try {
-            CommandRunner commandRunner = new CommandRunner(getEnv(), getInstallationDir(), getCommandTimeout(), getCWD());
+            CommandRunner commandRunner = new CommandRunner(getEnv(), getInstallationDir(), getCommandTimeout());
             commandRunner.runCommand(request);
             result = commandRunner.getCommandResult();
         }  finally {
             TestReporter.traceExecution(request, result);
         }
-    }
-
-    protected String getCWD() {
-        return cwd;
-    }
-
-    public void setCwd(String cwd) {
-        this.cwd = cwd;
     }
 
     protected Map<String, String> getEnv() {

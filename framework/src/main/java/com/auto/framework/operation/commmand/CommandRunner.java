@@ -1,15 +1,16 @@
 package com.auto.framework.operation.commmand;
 
 import com.auto.framework.operation.commmand.runner.CommandProcess;
-import com.auto.framework.reporter.TestReporter;
+import com.auto.framework.utils.ThreadMonitor;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.MapUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
+import java.io.*;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.FutureTask;
 import java.util.concurrent.TimeUnit;
@@ -26,41 +27,52 @@ public class CommandRunner {
     private CommandResult commandResult;
     private String installationDir;
     private long commandTimeout = TestCommandExecution.DEFAULT_COMMAND_TIMEOUT;
-    private String cwd;
 
+    /**
+     * With default timeout, null cwd and null installation dir
+     *
+     * @param env environment value for command if any
+     */
     public CommandRunner(Map<String, String> env) {
         this.envVariable = env;
     }
 
-    public CommandRunner(Map<String, String> env, String installationDir, long commandTimeout, String cwd) {
+    /**
+     * @param env             environment value for command if any
+     * @param installationDir command binary path
+     * @param commandTimeout  command time out in seconds
+     */
+    public CommandRunner(Map<String, String> env, String installationDir, long commandTimeout) {
         this.envVariable = env;
         this.installationDir = installationDir;
         this.commandTimeout = commandTimeout;
-        this.cwd = cwd;
     }
 
-    public void runCommand(CommandRequest commandRequest) {
+    /**
+     * @param commandRequest runs command as FutureTask in thread and waits till
+     *                       commandTimeout for it return, If doesn't return status
+     *                       will be -1
+     * @Depricated as it was returning extra message
+     */
+    @Deprecated
+    public void runCommandOld(CommandRequest commandRequest) {
         long timeTaken;
         long startTime = System.currentTimeMillis();
 
-        String[] command = commandRequest.getCommand();
-        if (StringUtils.isNotEmpty(installationDir)) {
-            command = addFirst(command, installationDir);
-        }
         File wd = null;
-        if (StringUtils.isNotEmpty(cwd)) {
-            wd = new File(cwd);
+        if (StringUtils.isNotEmpty(installationDir)) {
+            wd = new File(installationDir);
         }
         String[] environment = null;
         if (MapUtils.isNotEmpty(envVariable)) {
-            environment = envVariable.entrySet().stream().map(entry -> entry.getKey() + "+" + entry.getValue()).toArray(String[]::new);
+            environment = envVariable.entrySet().stream().map(entry -> entry.getKey() + "=" + entry.getValue()).toArray(String[]::new);
         }
         try {
 
             ByteArrayOutputStream ourStream = new ByteArrayOutputStream();
             ByteArrayOutputStream errorStream = new ByteArrayOutputStream();
 
-            FutureTask<Integer> task = new FutureTask<>(new CommandProcess(command, environment, wd, ourStream, errorStream));
+            FutureTask<Integer> task = new FutureTask<>(new CommandProcess(commandRequest.getCommand(), environment, wd, ourStream, errorStream));
             Thread t = new Thread(task);
             t.start();
             Integer integer = task.get(commandTimeout, TimeUnit.SECONDS);
@@ -78,45 +90,81 @@ public class CommandRunner {
         }
     }
 
-    /* public void runCommand(CommandRequest request) {
-         CommandProcess commandProcess = new CommandProcess();
-        commandProcess.runProcess(request.getCommand());
-
-        String command = request.getFullCommand();
-        if (StringUtils.isNotEmpty(installationDir)) {
-            command = installationDir + command;
-        }
-        List<String> listsResult = Lists.newArrayList();
-        List<String> listsError = Lists.newArrayList();
+    /**
+     * @param commandRequest runs command as FutureTask in thread and waits till
+     *                       commandTimeout for it return, If doesn't return status
+     *                       will be -1
+     */
+    public void runCommand(CommandRequest commandRequest) {
         long timeTaken;
         long startTime = System.currentTimeMillis();
+
+        String[] command = commandRequest.getCommand();
+        File wd = null;
+        if (StringUtils.isNotEmpty(installationDir)) {
+            wd = new File(installationDir);
+        }
+
+        String[] environment = null;
+        if (MapUtils.isNotEmpty(envVariable)) {
+            environment = envVariable.entrySet().stream().map(entry -> entry.getKey() + "=" + entry.getValue()).toArray(String[]::new);
+        }
+
+        List<String> listsResult = Lists.newArrayList();
+        List<String> listsError = Lists.newArrayList();
+        Process process = null;
+        InputStream inputStream = null;
+        InputStreamReader inputStreamReader = null;
+        InputStream errorStream = null;
+        InputStreamReader errorStreamReader = null;
+        OutputStream outputStream = null;
         try {
-            Process process = Runtime.getRuntime().exec(command);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            Thread monitor = ThreadMonitor.start(commandTimeout);
+
+            process = Runtime.getRuntime().exec(command, environment, wd);
+            outputStream = process.getOutputStream();
+            inputStream = process.getInputStream();
+            inputStreamReader = new InputStreamReader(inputStream);
+            BufferedReader reader = new BufferedReader(inputStreamReader);
             String line;
             while ((line = reader.readLine()) != null) {
                 listsResult.add(line);
             }
-
-            reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            errorStream = process.getErrorStream();
+            errorStreamReader = new InputStreamReader(errorStream);
+            reader = new BufferedReader(errorStreamReader);
             String error;
             while ((error = reader.readLine()) != null) {
                 listsError.add(error);
             }
-            //int exitVal = process.waitFor();
-            if (!process.waitFor(TimeUnit.MILLISECONDS.toSeconds(commandTimeout), TimeUnit.SECONDS)) {
-                process.destroy();
-            }
+            int exitVal = process.waitFor();
+
+            ThreadMonitor.stop(monitor);
+
             long endTime = System.currentTimeMillis();
             timeTaken = endTime - startTime;
-            commandResult = new CommandResult(process.exitValue(), listsResult, listsError, timeTaken);
-
+            commandResult = new CommandResult(exitVal, listsResult, listsError, timeTaken);
         } catch (Exception e) {
             long endTime = System.currentTimeMillis();
             timeTaken = endTime - startTime;
-            commandResult = new CommandResult(0, Collections.emptyList(), Lists.newArrayList(e.getMessage()), timeTaken);
+            commandResult = new CommandResult(-1, Collections.emptyList(), Lists.newArrayList(e.getMessage()), timeTaken);
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+            IOUtils.closeQuietly(inputStreamReader);
+            IOUtils.closeQuietly(errorStream);
+            IOUtils.closeQuietly(errorStreamReader);
+            IOUtils.closeQuietly(outputStream);
+            if (process != null) {
+                process.destroy();
+            }
         }
-    }*/
+    }
+
+    /**
+     * @param command array of string
+     * @param element the elements to be added
+     * @return String[] returns array with element added first
+     */
     private String[] addFirst(String command[], String element) {
         String[] arr = new String[command.length + 1];
         arr[0] = element;

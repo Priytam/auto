@@ -12,12 +12,11 @@ import org.junit.runners.model.Statement;
  */
 public abstract class AbstractMethodRule implements MethodRule {
 
-	@Override
-	public final Statement apply(final Statement arg0, FrameworkMethod arg1, Object arg2)
-	{
-		extractTestProperties(arg1, arg2);
-		return arg0;
-	}
+    @Override
+    public final Statement apply(final Statement statement, FrameworkMethod frameworkMethod, Object oTest) {
+        extractTestProperties(frameworkMethod, oTest);
+        return statement;
+    }
 
-	protected abstract void extractTestProperties(FrameworkMethod mTest, Object oTest);
+    protected abstract void extractTestProperties(FrameworkMethod mTest, Object oTest);
 }

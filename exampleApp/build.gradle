@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'com.github.priytam'
-version '1.1-java-8'
+version "${AUTO_VESRION}"
 
 repositories {
     mavenCentral()
@@ -21,7 +21,8 @@ jar {
 
 dependencies {
     //compile 'com.github.priytam:framework:1.0'
-    //compile 'com.github.priytam:framework:1.1-java-8'
+    compile 'com.github.priytam:framework:1.3-java-8'
+
     compile project(':framework')
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }

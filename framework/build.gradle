@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'com.github.priytam'
-version '1.1-java-8'
+version "${AUTO_VESRION}"
 
 repositories {
     mavenCentral()

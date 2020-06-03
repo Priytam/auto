@@ -19,13 +19,13 @@ import java.net.URL;
 public class HttpOpRequest implements OpRequest {
 
     private final String name;
-    private HttpURLConnection connection;
-    private CharSequence url;
+    private final HttpURLConnection connection;
+    private final CharSequence url;
     private int statusCode;
     private StringBuffer output;
     private String requestBody;
 
-    public HttpOpRequest(final CharSequence url, final HttpMethods method, String sName) throws HttpRequestException {
+    public HttpOpRequest(final CharSequence url, final HttpMethods method, String sName, int timeOut) throws HttpRequestException {
         this.name = sName;
         try {
             this.url = url;
@@ -33,6 +33,8 @@ public class HttpOpRequest implements OpRequest {
             connection = (HttpURLConnection) new URL(url.toString()).openConnection();
             connection.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101 Firefox/25.0");
             connection.setRequestMethod(method.toString());
+            connection.setConnectTimeout(timeOut);
+            connection.setReadTimeout(timeOut);
         } catch (IOException e) {
             throw new HttpRequestException(e);
         }
