@@ -62,49 +62,7 @@ public class XMLUtils {
         return valuesMap;
     }
 
-    public static List<Double> getDoubleValues(List<Node> nodes, String tagName) {
-        return getValues(nodes, tagName).stream().map(val -> Double.parseDouble(val.trim())).collect(Collectors.toList());
-    }
-
-    public static List<Long> getLongValues(List<Node> nodes, String tagName) {
-        return getValues(nodes, tagName).stream().map(val -> Long.parseLong(val.trim())).collect(Collectors.toList());
-    }
-
-    public static List<Integer> getIntValues(List<Node> nodes, String tagName) {
-        return getValues(nodes, tagName).stream().map(val -> Integer.parseInt(val.trim())).collect(Collectors.toList());
-    }
-
-    public static List<Boolean> getBooleanValues(List<Node> nodes, String tagName) {
-        return getValues(nodes, tagName).stream().map(val -> Boolean.parseBoolean(val.trim())).collect(Collectors.toList());
-    }
-
-    public static List<String> getValues(List<Node> nodes, String tagName) {
-        List<String> values = Lists.newArrayList();
-        nodes.forEach(node -> {
-            if (node.getNodeType() == Node.ELEMENT_NODE) {
-                Element element = (Element) node;
-                List<Node> nodeList = castNodeList(element.getElementsByTagName(tagName));
-                nodeList.forEach(n -> values.add(n.getTextContent()));
-            }
-        });
-        return values;
-    }
-
-    public static Map<String, List<String>> getValues(List<Node> nodes, List<String> tagName) {
-        Map<String, List<String>> valuesMap = Maps.newHashMap();
-        tagName.forEach(tag -> valuesMap.put(tag, getValues(nodes, tag)));
-        return valuesMap;
-    }
-
-    public List<Node> filterParentNodesByValue(String tagName, String value) {
-        return getNodeList(tagName).stream()
-                .filter(node -> node.getTextContent().trim().contains(value.trim()))
-                .map(Node::getParentNode)
-                .collect(Collectors.toList());
-    }
-
-
-    public List<Node> getNodeList(String tagName) {
+    private List<Node> getNodeList(String tagName) {
         NodeList elementsByTagName = xmlDocument.getElementsByTagName(tagName);
         return castNodeList(elementsByTagName);
     }

@@ -2,13 +2,10 @@ package com.auto.framework.utils;
 
 
 import com.auto.framework.check.Check;
-import com.google.common.collect.Lists;
 import org.junit.Test;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
 import java.util.List;
-import java.util.Map;
 
 public class XMLUtilsTest {
     private final String xmlString;
@@ -32,20 +29,6 @@ public class XMLUtilsTest {
         Check.assertTrue(year.contains(2005) && year.contains(2003), "Xml test year mismatched");
     }
 
-    @Test
-    public void xmlStaticMethodTest() {
-        XMLUtils xmlUtils = new XMLUtils(xmlString);
-        List<Node> nodes = xmlUtils.filterParentNodesByValue("year", "2005");
-        Check.assertEquals(2, nodes.size(), "Xml test filter by year size mismatched");
-        List<String> author = XMLUtils.getValues(nodes, "author");
-        Check.assertTrue(author.contains("Giada De Laurentiis") && author.contains("J K. Rowling"), "Xml test book mismatched");
-        List<Double> price = XMLUtils.getDoubleValues(nodes, "price");
-        Check.assertTrue(price.contains(30.00) && price.contains(29.99), "Xml test price mismatched");
-        Map<String, List<String>> map = XMLUtils.getValues(nodes, Lists.newArrayList("year", "price"));
-        Check.assertTrue(map.containsKey("year") && map.containsKey("price"));
-        Check.assertTrue(map.get("year").contains("2005"), "Xml test year mismatched");
-        Check.assertTrue(map.get("price").contains("29.99"), "Xml test price mismatched");
-    }
 
     @Test
     public void xmlMapperTest() {
