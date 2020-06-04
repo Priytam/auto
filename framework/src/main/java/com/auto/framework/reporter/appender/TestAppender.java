@@ -102,7 +102,8 @@ public class TestAppender implements TestReporterAppender {
 
     @Override
     public void traceExecution(HttpOpRequest request) {
-        String sResultPath = dumpWebResults(request.getCommandName(), request.getUrl().toString(), request.getContent(), request.getStatusCode(), request.getOutput().toString());
+        String output = request.getOutput() == null ? "" : request.getOutput().toString();
+        String sResultPath = dumpWebResults(request.getCommandName(), request.getUrl().toString(), request.getContent(), request.getStatusCode(), output);
         log.info("\n-");
         logMessage(ConsoleStyle.decorate(ConsoleStyle.CYAN, "executed api: ") + request.getUrl(), false);
         logMessage(ConsoleStyle.decorate(ConsoleStyle.CYAN,"result in: ") + " file://" + sResultPath, false);

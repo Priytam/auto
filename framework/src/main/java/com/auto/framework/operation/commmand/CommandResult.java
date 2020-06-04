@@ -21,6 +21,12 @@ public class CommandResult implements OpResult {
     private final List<String> lstStdErr = new ArrayList<String>();
     private long executionTime = 0;
 
+    /**
+     * @param exitStatus command exist status code 0 if ran successfully -1  if timed out
+     * @param output command output per line as new element in list
+     * @param errorOutput error output per line as new element in list
+     * @param lExecutionTime time took to execute command in millisec
+     */
     public CommandResult(int exitStatus, List<String> output, List<String> errorOutput, long lExecutionTime) {
         this.exitStatus = exitStatus;
         lstStdOut.addAll(output);

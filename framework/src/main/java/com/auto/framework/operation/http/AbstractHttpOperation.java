@@ -31,10 +31,11 @@ public abstract class AbstractHttpOperation implements Operation {
             request = getHttpRequestBuilder().build();
             request.sendRequest();
             long endTime = System.currentTimeMillis();
+            String output = request.getOutput() == null ? "null" : request.getOutput().toString();
             if (request.getStatusCode() == HttpURLConnection.HTTP_OK || request.getStatusCode() == HttpURLConnection.HTTP_CREATED || request.getStatusCode() == HttpURLConnection.HTTP_ACCEPTED) {
-                response = new HttpOpResponse(request.getStatusCode(), Lists.newArrayList(request.getOutput().toString()), Collections.emptyList(), endTime - startTime);
+                response = new HttpOpResponse(request.getStatusCode(), Lists.newArrayList(output), Collections.emptyList(), endTime - startTime);
             } else {
-                response = new HttpOpResponse(request.getStatusCode(), Collections.emptyList(), Lists.newArrayList(request.getOutput().toString()), endTime - startTime);
+                response = new HttpOpResponse(request.getStatusCode(), Collections.emptyList(), Lists.newArrayList(output), endTime - startTime);
             }
         } catch (Exception e) {
             long endTime = System.currentTimeMillis();

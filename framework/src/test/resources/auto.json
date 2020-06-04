@@ -1,0 +1,10 @@
+{
+  "resourcePath": "/tmp/resources",
+  "applications": [
+    {
+      "name": "test",
+      "server": "https://reqres.in",
+      "logDir": "/var/log/tomcat7/catalina.out"
+    }
+  ]
+}

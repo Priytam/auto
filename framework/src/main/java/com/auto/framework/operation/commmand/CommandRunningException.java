@@ -16,6 +16,10 @@ public class CommandRunningException extends RuntimeException {
         super(cause);
     }
 
+    public CommandRunningException(final String message) {
+        super(message);
+    }
+
     @Override
     public IOException getCause() {
         return (IOException) super.getCause();
