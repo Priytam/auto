@@ -52,8 +52,8 @@ public class CommandRunner {
      * @param commandRequest runs command as FutureTask in thread and waits till
      *                       commandTimeout for it return, If doesn't return status
      *                       will be -1
-     * @Depricated as it was returning extra message
      */
+
     @Deprecated
     public void runCommandOld(CommandRequest commandRequest) {
         long timeTaken;

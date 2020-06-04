@@ -69,7 +69,7 @@ public class CommandRequest implements OpRequest {
     }
 
     /**
-     *  returns full command as string
+     * @return {@link String} full command as string
      */
     public String getFullCommand() {
         if (null == arrCommand || arrCommand.length <= 0 || StringUtils.isBlank(arrCommand[0])) {
