@@ -1,7 +1,10 @@
 package com.auto.framework.rules.tags;
 
 import com.auto.framework.rules.AbstractMethodRule;
+import joptsimple.internal.Strings;
 import org.junit.runners.model.FrameworkMethod;
+
+import java.util.Objects;
 
 public class TagsRule extends AbstractMethodRule {
     private String[] tags;
@@ -19,8 +22,12 @@ public class TagsRule extends AbstractMethodRule {
 
     public String getTags() {
         StringBuilder sb = new StringBuilder();
-        for (String str : tags)
-            sb.append(str).append(",");
-        return sb.substring(0, sb.length() - 1);
+        if (Objects.nonNull(tags)) {
+            for (String str : tags) {
+                sb.append(str).append(",");
+            }
+            return sb.substring(0, sb.length() - 1);
+        }
+        return Strings.EMPTY;
     }
 }
