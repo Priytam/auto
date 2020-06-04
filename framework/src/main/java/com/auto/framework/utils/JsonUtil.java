@@ -51,7 +51,7 @@ public final class JsonUtil {
         }
     }
 
-    public static <T> T serialize(InputStream in, Class<T> tClass) {
+    public static <T> T deSerialize(InputStream in, Class<T> tClass) {
         try {
             return mapper.readValue(in, tClass);
         } catch (Exception e) {
