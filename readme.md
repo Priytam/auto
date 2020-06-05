@@ -1,5 +1,5 @@
 [![Test Status](https://circleci.com/gh/Priytam/auto.svg?style=svg)](https://circleci.com/gh/Priytam/auto)
-[![Build Status](https://api.cirrus-ci.com/github/Priytam/auto.svg)](https://cirrus-ci.com/github/Priytam/auto)
+[![Build Status](https://travis-ci.org/Priytam/auto.svg?branch=master)](https://travis-ci.org/Priytam/auto)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.priytam/framework/badge.svg)](https://search.maven.org/search?q=g:com.github.priytam%20AND%20a:framework)
 
 
