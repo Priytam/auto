@@ -20,7 +20,7 @@ Thanks goes to these wonderful and brilliant people:
 <table>
     <tr>
         <td align="center">
-            <a href="https://kentcdodds.com">
+            <a href="https://github.com/Priytam">
                 <img src="https://avatars0.githubusercontent.com/u/9968995?v=4" width="100px;" alt=""/>
                 <br/>
                 <sub><b>Priytam Jee Pandey </b></sub>
@@ -33,7 +33,7 @@ Thanks goes to these wonderful and brilliant people:
             <a href="#question-priytam" title="Answering Questions">💬</a>
         </td>
         <td align="center">
-            <a href="https://kentcdodds.com">
+            <a href="https://github.com/vipulpopli7534">
                 <img src="https://avatars1.githubusercontent.com/u/35270614?v=4" width="100px;" alt=""/>
                 <br/>
                 <sub><b>Vipul Popli</b></sub>
@@ -46,7 +46,7 @@ Thanks goes to these wonderful and brilliant people:
             <a href="#tool-vipulpopli7534" title="Tools">🔧</a>
         </td>
         <td align="center">
-            <a href="https://kentcdodds.com">
+            <a href="https://github.com/Niyatiluthra">
                 <img src="https://avatars1.githubusercontent.com/u/47671873?v=4" width="100px;" alt=""/>
                 <br/>
                 <sub><b>Niyati Luthra</b></sub>
