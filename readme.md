@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/Priytam/auto.svg?style=svg)](https://priytam.github.io/auto/)
+
 # Enhanced Automation Tool (eat)
 
 ## Purpose
