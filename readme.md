@@ -1,3 +1,5 @@
+# Enhanced Automation Tool (eat)
+
 [![GitHub license](https://img.shields.io/github/license/Priytam/auto.svg)](https://github.com/Priytam/auto/blob/master/LICENSE)
 [![Test Status](https://circleci.com/gh/Priytam/auto.svg?style=svg)](https://circleci.com/gh/Priytam/auto)
 [![Build Status](https://travis-ci.org/Priytam/auto.svg?branch=master)](https://travis-ci.org/Priytam/auto)
@@ -8,7 +10,56 @@
 [![Open Source Love svg2](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 
-# Enhanced Automation Tool (eat)
+## Contributors ✨
+
+Thanks goes to these wonderful and brilliant people:
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+    <tr>
+        <td align="center">
+            <a href="https://kentcdodds.com">
+                <img src="https://avatars0.githubusercontent.com/u/9968995?v=4" width="100px;" alt=""/>
+                <br/>
+                <sub><b>Priytam Jee Pandey </b></sub>
+            </a>
+            <br/>
+            <a href="https://github.com/Priytam/auto/commits?author=priytam" title="Documentation">📖</a>
+            <a href="https://github.com/Priytam/auto/pulls?q=is%3Apr+reviewed-by%3Apriytam" title="Reviewed Pull Requests">👀</a>
+            <a href="#design-priytam" title="Design">🎨</a>
+            <a href="#talk-priytam" title="Talks">📢</a>
+            <a href="#question-priytam" title="Answering Questions">💬</a>
+        </td>
+        <td align="center">
+            <a href="https://kentcdodds.com">
+                <img src="https://avatars1.githubusercontent.com/u/35270614?v=4" width="100px;" alt=""/>
+                <br/>
+                <sub><b>Vipul Popli</b></sub>
+            </a>
+            <br/>
+            <a href="https://github.com/Priytam/auto/commits?author=vipulpopli7534" title="Documentation">📖</a>
+            <a href="https://github.com/Priytam/auto/pulls?q=is%3Apr+reviewed-by%3Avipulpopli7534" title="Reviewed Pull Requests">👀
+            </a>
+            <a href="#question-vipulpopli7534" title="Answering Questions">💬</a>
+            <a href="#tool-vipulpopli7534" title="Tools">🔧</a>
+        </td>
+        <td align="center">
+            <a href="https://kentcdodds.com">
+                <img src="https://avatars1.githubusercontent.com/u/47671873?v=4" width="100px;" alt=""/>
+                <br/>
+                <sub><b>Niyati Luthra</b></sub>
+            </a>
+            <br/>
+            <a href="https://github.com/Priytam/auto/commits?author=Niyatiluthra" title="Documentation">📖</a>
+            <a href="https://github.com/Priytam/auto/pulls?q=is%3Apr+reviewed-by%3ANiyatiluthra" title="Reviewed Pull Requests">👀</a>
+            <a href="#question-Niyatiluthra" title="Answering Questions">💬</a>
+            <a href="#tool-Niyatiluthra" title="Tools">🔧</a>
+        </td>
+    </tr>
+</table>
+
 
 ## Purpose
 *To write automated tests for api, web page and command line based application*
