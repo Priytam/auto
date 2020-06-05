@@ -1,4 +1,6 @@
-[![CircleCI](https://circleci.com/gh/Priytam/auto.svg?style=svg)](https://priytam.github.io/auto/)
+[![CircleCI](https://circleci.com/gh/Priytam/auto.svg?style=svg)](https://circleci.com/gh/Priytam/auto)
+[![Build Status](https://api.cirrus-ci.com/github/Priytam/auto.svg)](https://cirrus-ci.com/github/Priytam/auto)
+
 
 # Enhanced Automation Tool (eat)
 
