@@ -1,8 +1,12 @@
+[![GitHub license](https://img.shields.io/github/license/Priytam/auto.svg)](https://github.com/Priytam/auto/blob/master/LICENSE)
 [![Test Status](https://circleci.com/gh/Priytam/auto.svg?style=svg)](https://circleci.com/gh/Priytam/auto)
 [![Build Status](https://travis-ci.org/Priytam/auto.svg?branch=master)](https://travis-ci.org/Priytam/auto)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.priytam/framework/badge.svg)](https://search.maven.org/search?q=g:com.github.priytam%20AND%20a:framework)
 
-
+[![HitCount](http://hits.dwyl.io/Priytam/auto.svg?style=svg)](http://hits.dwyl.io/Priytam/auto)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?)](http://makeapullrequest.com)
+[![Open Source Love svg2](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 
 # Enhanced Automation Tool (eat)
 
