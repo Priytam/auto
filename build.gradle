@@ -8,6 +8,7 @@ buildscript {
 }
 apply plugin: 'io.codearte.nexus-staging'
 apply plugin: 'java'
+apply plugin: 'jacoco'
 
 
 group 'com.github.priytam'
@@ -55,6 +56,8 @@ if (project.hasProperty('release')) {
     allprojects {
         apply plugin: 'signing'
         apply plugin: 'maven'
+        apply plugin: 'jacoco'
+        apply plugin: 'jacoco'
 
         // Signature of artifacts
         signing {
@@ -111,6 +114,25 @@ if (project.hasProperty('release')) {
 nexusStaging {
     username = ossrhUser
     password = ossrhPassword
+}
+
+task codeCoverageReport(type: JacocoReport) {
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+    subprojects.each {
+        sourceSets it.sourceSets.main
+    }
+
+    reports {
+        xml.enabled true
+        xml.destination(file("${buildDir}/reports/jacoco/report.xml"))
+        html.enabled false
+        csv.enabled false
+    }
+}
+
+codeCoverageReport.dependsOn {
+    subprojects*.test
 }
 
 /* use this command to publish library ./gradlew build -Prelease uploadArchives */
