@@ -101,9 +101,4 @@ public class CommandRunnerTest {
         Assert.assertEquals(commandResult.getExitStatus(), -1);
     }
 
-    @Test
-    public void shouldFailNew() {
-        Assert.assertEquals(1, -1);
-    }
-
 }
