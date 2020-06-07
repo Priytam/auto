@@ -1044,7 +1044,16 @@ public class BasicMockServerTestCase extends ReqResWithMockServerTestCase {
 **[Back to top](#table-of-contents)**
 
 ## Annotations and custom rules
-**@Tags**
+
+
+***List of Annotations***
+* [@Tags](#Tags)
+* [@KeepLog](#KeepLog)
+* [@HaltOnError](#HaltOnError)
+* [@ParameterizedTest](#ParameterizedTest)
+* [@Repeat](#Repeat)
+
+####Tags
 
 Tag annotation allows you to mention the id of the bug, you are writing that test case for. Through this you can identify and test your bugs whether they are resolved or not.
 For example, if in your function, you have written test case for 2 bugs whose id's are "ABC-91" and "ABC-20", then you can mention this annotation above your function like `@Tags(value = {"ABC-91", "ABC-20"})`.  
@@ -1059,8 +1068,7 @@ For example, if in your function, you have written test case for 2 bugs whose id
         Check.assertEquals("StatusCode Weekly", user.getAd().getCompany(), "Incorrect company name");
     }
 ```
-
-When the text executor will provide you the detailed report in console, it will also have a column of tags in which the tag referred to your test case will be shown.
+When the text executor provides the detailed report in console, it will also shows a column of tags in which the tag referred to your test case will be present.
 
 ![Tags](doc/Tags.png)
 
