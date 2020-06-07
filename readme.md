@@ -113,6 +113,11 @@ P.S. your PR should also contain explanation of changes below
   1. [Build and Deployment](#build-and-deployment)
   1. [Mock Server](#mock-server)
   1. [Annotations and custom rules](#annotations-and-custom-rules)
+        * [@Tags](#tags)
+        * [@KeepLog](#@keeplog)
+        * [@HaltOnError](#haltonerror)
+        * [@ParameterizedTest](#parameterizedtest)
+        * [@Repeat](#repeat)
   1. [Example test cases](#example-test-cases)
   1. [Best Practices](#best-practices)
 
@@ -1045,14 +1050,6 @@ public class BasicMockServerTestCase extends ReqResWithMockServerTestCase {
 
 ## Annotations and custom rules
 
-
-***List of Annotations***
-* [@Tags](#Tags)
-* [@KeepLog](#KeepLog)
-* [@HaltOnError](#HaltOnError)
-* [@ParameterizedTest](#ParameterizedTest)
-* [@Repeat](#Repeat)
-
 #### Tags
 
 Tag annotation allows you to mention the id of the bug, you are writing that test case for. Through this you can identify and test your bugs whether they are resolved or not.
@@ -1068,7 +1065,7 @@ For example, if in your function, you have written test case for 2 bugs whose id
         Check.assertEquals("StatusCode Weekly", user.getAd().getCompany(), "Incorrect company name");
     }
 ```
-When the text executor provides the detailed report in console, it will also shows a column of tags in which the tag referred to your test case will be present.
+When the text executor provides the detailed report in console, it will also display a column titled Tags in which the tag assigned to your test case will be present.
 
 ![Tags](doc/Tags.png)
 
