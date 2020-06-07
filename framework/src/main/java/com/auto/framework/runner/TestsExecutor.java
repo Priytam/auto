@@ -2,7 +2,7 @@ package com.auto.framework.runner;
 
 import com.auto.framework.env.RegressionEnvironment;
 import com.auto.framework.reporter.TestReporter;
-import com.auto.framework.reporter.data.TestDataReporter;
+import com.auto.framework.runner.console.ConsoleStyle;
 import com.auto.framework.runner.console.progressbar.ProgressBar;
 import com.auto.framework.runner.console.progressbar.ProgressBarStyle;
 import com.auto.framework.runner.data.ExecutionResult;
@@ -17,6 +17,7 @@ import com.auto.framework.runner.report.MailReporter;
 import com.auto.framework.runner.testlist.TestListBuilder;
 import com.auto.framework.runner.testlist.TestListBuilderImpl;
 import com.google.common.collect.Lists;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import java.nio.file.Files;
@@ -82,6 +83,7 @@ public class TestsExecutor {
 
     private void init() {
         System.setProperty(RegressionEnvironment.REGRESSION.name(), "true");
+        BasicConfigurator.configure();
     }
 
     private Collection<String> buildTests(String packagePrefix) {
@@ -94,6 +96,8 @@ public class TestsExecutor {
         for (String test : tests) {
             pb.step();
             TestJob testJob = new TestJob(test, testFailureExceptionHandler);
+            String currentTest = ConsoleStyle.decorate(ConsoleStyle.PURPLE, "[ " + testJob.getTestName() + " ]");
+            pb.setExtraMessage(currentTest);
             TestJobResult result = new TestJobRetryHandler().doWithRetry(retryCount + 1, testJob);
             results.add(result);
             onTestCompletion(result);

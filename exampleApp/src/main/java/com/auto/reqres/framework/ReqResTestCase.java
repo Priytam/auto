@@ -2,11 +2,11 @@ package com.auto.reqres.framework;
 
 import com.auto.framework.AbstractTestCase;
 import com.auto.framework.TestComponentData;
-import com.auto.framework.auto.AutoConf;
 import com.auto.framework.iface.ITestComponent;
-import com.auto.framework.reporter.TestReporter;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,12 +26,21 @@ public class ReqResTestCase extends AbstractTestCase {
 
     @Override
     protected void initComponents() {
-        AutoConf.Application currentApplicationConfig = getCurrentApplicationConfig();
-        TestComponentData testComponentData = new TestComponentData.Builder()
-                .build(currentApplicationConfig.getServer(), currentApplicationConfig.getLogDir());
+        TestComponentData testComponentData = new TestComponentData
+                .Builder()
+                .withAppConfig(getCurrentApplicationConfig())
+                .withResourcePath(getConfig().getResourcePath())
+                .build();
         server = new ReqResServer(testComponentData);
+
         lstComponents = new ArrayList<>();
         lstComponents.add(server);
+        lstComponents.addAll(initComponentsSpecific());
+
+    }
+
+    protected Collection<? extends ITestComponent> initComponentsSpecific() {
+        return Collections.emptyList();
     }
 
     @Override

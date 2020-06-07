@@ -5,7 +5,6 @@ import com.auto.framework.TestComponentData;
 import com.auto.framework.iface.ITestComponent;
 import com.google.common.collect.Lists;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +25,9 @@ public class RedisTestCase extends AbstractTestCase {
     protected void initComponents() {
         TestComponentData componentData = new TestComponentData
                 .Builder()
-                .build(getCurrentApplicationConfig().getInstallationDir());
+                .withAppConfig(getCurrentApplicationConfig())
+                .withResourcePath(getConfig().getResourcePath())
+                .build();
         server = new RedisServer(componentData);
     }
 

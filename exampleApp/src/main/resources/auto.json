@@ -1,5 +1,5 @@
 {
-  "resourcePath": "/tmp/resources",
+  "resourcePath": "/tmp",
   "applications": [
     {
       "name": "ReqRes",

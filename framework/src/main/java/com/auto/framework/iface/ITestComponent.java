@@ -1,5 +1,7 @@
 package com.auto.framework.iface;
 
+import com.auto.framework.TestComponentData;
+
 /**
  * User: Priytam Jee Pandey
  * Date: 28/05/20
@@ -32,4 +34,8 @@ public interface ITestComponent {
     void prepare();
 
     String getInstallationDir();
+
+    String getResourcePath();
+
+    TestComponentData getComponentData();
 }
