@@ -1,7 +1,7 @@
 package com.auto.redis.operation;
 
 import com.auto.framework.operation.commmand.AbstractCommandOperation;
-import com.auto.framework.operation.commmand.CommandRequest;
+import com.auto.framework.operation.commmand.CommandBuilder;
 
 /**
  * User: Priytam Jee Pandey
@@ -11,9 +11,10 @@ import com.auto.framework.operation.commmand.CommandRequest;
  */
 public class RedisPingOperation extends AbstractCommandOperation {
 
+    private String installationDir;
 
     public RedisPingOperation(String installationDir) {
-        super(installationDir, new CommandRequest(new String[]{"redis-cli", "ping"}));
+        this.installationDir = installationDir;
     }
 
     @Override
@@ -24,5 +25,10 @@ public class RedisPingOperation extends AbstractCommandOperation {
     @Override
     public String getName() {
         return "RedisPingOp";
+    }
+
+    @Override
+    protected CommandBuilder getCommandBuilder() {
+        return new CommandBuilder().withCommand(new String[]{"redis-cli", "ping"}).withInstallationDir(installationDir);
     }
 }

@@ -1,12 +1,13 @@
 package com.auto.redis.operation;
 
 import com.auto.framework.operation.commmand.AbstractCommandOperation;
-import com.auto.framework.operation.commmand.CommandRequest;
+import com.auto.framework.operation.commmand.CommandBuilder;
 
 public class RedisStopOp extends AbstractCommandOperation {
+    private String installationDir;
 
     public RedisStopOp(String installationDir) {
-        super(installationDir, new CommandRequest(new String[]{"redis-cli", "shutdown"}));
+        this.installationDir = installationDir;
     }
 
     @Override
@@ -17,5 +18,10 @@ public class RedisStopOp extends AbstractCommandOperation {
     @Override
     public String getName() {
         return "RedisStopOp";
+    }
+
+    @Override
+    protected CommandBuilder getCommandBuilder() {
+        return new CommandBuilder().withCommand(new String[]{"redis-cli", "shutdown"}).withInstallationDir(installationDir);
     }
 }
