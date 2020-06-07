@@ -10,6 +10,10 @@
 [![Open Source Love svg2](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
 
+<p align="right">
+  <img src="doc/logo.jpg" width="350" title="hover text">
+</p>
+
 ## Contributors ✨
 
 Thanks goes to these wonderful and brilliant people:
