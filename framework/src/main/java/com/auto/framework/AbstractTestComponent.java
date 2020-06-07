@@ -19,7 +19,9 @@ public abstract class AbstractTestComponent implements ITestComponent {
     private final String logDir;
     private static final int NUMBER_OF_TIMES_TRY_TO_START = 5;
     private final String server;
-    private String installationDir;
+    private final String installationDir;
+    private final String resourcePath;
+    private final TestComponentData componentData;
 
     protected AbstractTestComponent(TestComponentData data) {
         this.host = data.getHost();
@@ -27,6 +29,8 @@ public abstract class AbstractTestComponent implements ITestComponent {
         this.logDir = data.getLogDir();
         this.server = data.getServer();
         this.installationDir = data.getInstallationDir();
+        this.resourcePath = data.getResourcePath();
+        this.componentData = data;
     }
 
     @Override
@@ -134,5 +138,15 @@ public abstract class AbstractTestComponent implements ITestComponent {
     @Override
     public String getInstallationDir() {
         return installationDir;
+    }
+
+    @Override
+    public String getResourcePath() {
+        return resourcePath;
+    }
+
+    @Override
+    public TestComponentData getComponentData() {
+        return componentData;
     }
 }

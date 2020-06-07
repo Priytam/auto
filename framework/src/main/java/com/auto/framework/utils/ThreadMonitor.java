@@ -70,7 +70,6 @@ public class ThreadMonitor implements Runnable {
             Thread.sleep(timeout);
             thread.interrupt();
         } catch (InterruptedException e) {
-            System.out.println();
             // timeout not reached
         }
     }

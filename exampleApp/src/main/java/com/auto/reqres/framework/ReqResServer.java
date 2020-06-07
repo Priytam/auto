@@ -32,7 +32,11 @@ public class ReqResServer extends AbstractAlwaysRunningTestComponent {
     }
 
     public User getUser(int userId) {
-        OpResult opResult = performOperation(new GetUserOp(getServer(), userId));
+       return getUser(getServer(), getHost(), getPort(), userId);
+    }
+
+    public User getUser(String server, String host, int port, int userId) {
+        OpResult opResult = performOperation(new GetUserOp(server, host, port, userId));
         if (CollectionUtils.isNotEmpty(opResult.getStdOut())) {
             return JsonUtil.deSerialize(opResult.toStringAsOneLine(), User.class);
         }
