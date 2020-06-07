@@ -116,6 +116,11 @@ P.S. your PR should also contain explanation of changes below
   1. [Build and Deployment](#build-and-deployment)
   1. [Mock Server](#mock-server)
   1. [Annotations and custom rules](#annotations-and-custom-rules)
+        * [@Tags](#tags)
+        * [@KeepLog](#@keeplog)
+        * [@HaltOnError](#haltonerror)
+        * [@ParameterizedTest](#parameterizedtest)
+        * [@Repeat](#repeat)
   1. [Example test cases](#example-test-cases)
   1. [Best Practices](#best-practices)
 
@@ -1047,7 +1052,27 @@ public class BasicMockServerTestCase extends ReqResWithMockServerTestCase {
 **[Back to top](#table-of-contents)**
 
 ## Annotations and custom rules
-`Work in progerss`
+
+#### Tags
+
+Tag annotation allows you to mention the id of the bug, you are writing that test case for. Through this you can identify and test your bugs whether they are resolved or not.
+For example, if in your function, you have written test case for 2 bugs whose id's are "ABC-91" and "ABC-20", then you can mention this annotation above your function like `@Tags(value = {"ABC-91", "ABC-20"})`.  
+
+```java
+    @Test
+    @Tags(value = {"ABC-91","ABC-20"})
+    public void adData() {
+        User user = getServer().getUser(2);
+        Check.assertNotNull(user.getAd(), "Ad was null");
+        Check.assertNotNull(user.getAd().getCompany(), "Ad company was null");
+        Check.assertEquals("StatusCode Weekly", user.getAd().getCompany(), "Incorrect company name");
+    }
+```
+When the text executor provides the detailed report in console, it will also display a column titled Tags in which the tag assigned to your test case will be present.
+
+![Tags](doc/Tags.png)
+
+
 **[Back to top](#table-of-contents)**
 
 ## Running command on remote server
