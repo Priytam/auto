@@ -1,7 +1,7 @@
 package com.auto.redis.operation;
 
 import com.auto.framework.operation.commmand.AbstractCommandOperation;
-import com.auto.framework.operation.commmand.CommandRequest;
+import com.auto.framework.operation.commmand.CommandBuilder;
 
 /**
  * User: Priytam Jee Pandey
@@ -11,8 +11,10 @@ import com.auto.framework.operation.commmand.CommandRequest;
  */
 public class RedisStartOp extends AbstractCommandOperation {
 
+    private String installationDir;
+
     public RedisStartOp(String installationDir) {
-        super(installationDir, new CommandRequest(new String[] {"redis-server"}));
+        this.installationDir = installationDir;
     }
 
     @Override
@@ -23,5 +25,10 @@ public class RedisStartOp extends AbstractCommandOperation {
     @Override
     public String getName() {
         return "RedisStartOp";
+    }
+
+    @Override
+    protected CommandBuilder getCommandBuilder() {
+        return new CommandBuilder().withCommand(new String[]{"redis-server"}).withInstallationDir(installationDir);
     }
 }

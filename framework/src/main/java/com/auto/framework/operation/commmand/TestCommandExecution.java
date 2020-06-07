@@ -74,15 +74,13 @@ public class TestCommandExecution {
     }
 
     public static Map<String, String> generateCompEnvironment() {
-        Map<String, String> mpUserEnv = new HashMap<String, String>();
+        Map<String, String> mpUserEnv;
         synchronized (mpEnv) {
-            mpUserEnv.putAll(mpEnv);
+            mpUserEnv = new HashMap<>(mpEnv);
         }
-        if (!mpUserEnv.isEmpty()) {
-            for (Map.Entry<String, String> e : mpDefaultEnv.entrySet()) {
-                if (!mpUserEnv.containsKey(e.getKey())) {
-                    mpUserEnv.put(e.getKey(), e.getValue());
-                }
+        for (Map.Entry<String, String> e : mpDefaultEnv.entrySet()) {
+            if (!mpUserEnv.containsKey(e.getKey())) {
+                mpUserEnv.put(e.getKey(), e.getValue());
             }
         }
         return mpUserEnv;
