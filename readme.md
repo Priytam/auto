@@ -1,7 +1,7 @@
-<p>
-  <h1>Auto and Enhanced Automation Tool (eat)</h1>
-    <img src="doc/logo.jpg" width="350" title="Auto logo" float="right">
-<p>
+<div>
+  <h1 style="display: inline"> Auto and Enhanced Automation Tool (eat) </h1>
+  <img src="doc/logo.jpg" width="350" title="Auto logo" style="display: inline" align="right">
+</div>
 
 [![GitHub license](https://img.shields.io/github/license/Priytam/auto.svg)](https://github.com/Priytam/auto/blob/master/LICENSE)
 [![Test Status](https://circleci.com/gh/Priytam/auto.svg?style=svg)](https://circleci.com/gh/Priytam/auto)
