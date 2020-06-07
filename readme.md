@@ -1,4 +1,7 @@
-# Enhanced Automation Tool (eat)
+<p>
+  <h1>Auto and Enhanced Automation Tool (eat)</h1>
+    <img src="doc/logo.jpg" width="350" title="Auto logo" float="right">
+<p>
 
 [![GitHub license](https://img.shields.io/github/license/Priytam/auto.svg)](https://github.com/Priytam/auto/blob/master/LICENSE)
 [![Test Status](https://circleci.com/gh/Priytam/auto.svg?style=svg)](https://circleci.com/gh/Priytam/auto)
@@ -9,10 +12,6 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?)](http://makeapullrequest.com)
 [![Open Source Love svg2](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/Naereen/StrapDown.js/graphs/commit-activity)
-
-<p align="right">
-  <img src="doc/logo.jpg" width="350" title="hover text">
-</p>
 
 ## Contributors ✨
 
