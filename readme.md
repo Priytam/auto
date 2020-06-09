@@ -1,5 +1,5 @@
 <div>
-  <h1 style="display: inline"> Auto and Enhanced Automation Tool (eat) </h1>
+  <h1 style="display: inline"> Auto an Enhanced Automation Tool (eat) </h1>
   <img src="doc/logo.jpg" width="350" title="Auto logo" style="display: inline" align="right">
 </div>
 
