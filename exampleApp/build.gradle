@@ -21,7 +21,7 @@ jar {
 
 dependencies {
     //compile 'com.github.priytam:framework:1.0'
-    compile 'com.github.priytam:framework:1.4-java-8'
+   //compile 'com.github.priytam:framework:1.4-java-8'
 
     compile project(':framework')
     testCompile group: 'junit', name: 'junit', version: '4.12'

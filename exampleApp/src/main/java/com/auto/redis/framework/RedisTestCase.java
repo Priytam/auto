@@ -5,6 +5,7 @@ import com.auto.framework.TestComponentData;
 import com.auto.framework.iface.ITestComponent;
 import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +17,7 @@ import java.util.List;
 public class RedisTestCase extends AbstractTestCase {
 
     private RedisServer server;
+    private ArrayList<RedisServer> redisServers = new ArrayList<>();
 
     protected RedisTestCase() {
         super("RedisServer");
@@ -29,11 +31,12 @@ public class RedisTestCase extends AbstractTestCase {
                 .withResourcePath(getConfig().getResourcePath())
                 .build();
         server = new RedisServer(componentData);
+        redisServers = Lists.newArrayList(server);
     }
 
     @Override
     public List<? extends ITestComponent> getTestComponents() {
-        return Lists.newArrayList(server);
+        return redisServers;
     }
 
     public RedisServer getServer() {

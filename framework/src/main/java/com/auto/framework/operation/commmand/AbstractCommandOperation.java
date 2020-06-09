@@ -18,10 +18,12 @@ public abstract class AbstractCommandOperation implements Operation {
     private static final Map<String, String> mpEnv = Collections.synchronizedMap(new HashMap<String, String>());
     private CommandRequest request;
     private CommandResult result = null;
+    private CommandBuilder commandBuilder;
 
     public AbstractCommandOperation() {
         mpEnv.put("TZ", TimeZone.getDefault().getID());
-        request = getCommandBuilder().buildRequest();
+        commandBuilder = getCommandBuilder();
+        request = commandBuilder.buildRequest();
     }
 
     @Override
@@ -58,12 +60,12 @@ public abstract class AbstractCommandOperation implements Operation {
         synchronized (mpEnv) {
             mpUserEnv = new HashMap<>(mpEnv);
         }
-        mpUserEnv.putAll(getCommandBuilder().getMpEnv());
+        mpUserEnv.putAll(commandBuilder.getMpEnv());
         return mpUserEnv;
     }
 
     public String getInstallationDir() {
-        return getCommandBuilder().getInstallationDir();
+        return commandBuilder.getInstallationDir();
     }
 
     protected String getHost() {
@@ -71,7 +73,7 @@ public abstract class AbstractCommandOperation implements Operation {
     }
 
     public long getCommandTimeout() {
-        return getCommandBuilder().getCommandTimeout();
+        return commandBuilder.getCommandTimeout();
     }
 
     public static void setEnv(String sEnv, String sValue) {

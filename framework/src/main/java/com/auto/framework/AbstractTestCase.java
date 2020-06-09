@@ -92,7 +92,7 @@ public abstract class AbstractTestCase implements ITestCase {
     }
 
     private void prepareTags() {
-        TestDataReporter.addData("tags",tagsRule.getTags(), true);
+        TestDataReporter.addData("tags", tagsRule.getTags(), true);
     }
 
     private String prepareTick() {
