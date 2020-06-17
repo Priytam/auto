@@ -13,6 +13,15 @@ apply plugin: 'jacoco'
 
 group 'com.github.priytam'
 version "${AUTO_VESRION}"
+description = """\
+Automation tool to write tests for Http Api, Web Page Action, and Command
+Line based application with embedded mock server and highly configurable reports
+------------------------------------------
+Project version: ${version}
+Gradle version: ${gradle.gradleVersion}
+Documentation: https://priytam.github.io/auto/
+------------------------------------------
+"""
 
 repositories {
     mavenCentral()
