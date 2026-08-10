@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Twin Birthday ×2</title>
+
+<style>
+  :root{
+    --ink:#201B3A;
+    --paper:#FFF7EC;
+    --paper-2:#FFEEDA;
+    --coral:#FF5A5F;
+    --teal:#00A896;
+    --gold:#FFC53D;
+    --ink-soft:#5A5378;
+    --card:#FFFFFF;
+    --shadow:0 10px 30px rgba(32,27,58,.12);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Avenir Next','Segoe UI',system-ui,-apple-system,sans-serif;
+    line-height:1.55;
+    overflow-x:hidden;
+  }
+  .mono{font-family:'SF Mono',ui-monospace,'Cascadia Code',Consolas,monospace;
+    text-transform:uppercase;letter-spacing:.18em;font-size:.72rem;font-weight:600}
+
+  /* ---------- HERO ---------- */
+  header{
+    position:relative;
+    min-height:92vh;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;padding:4rem 1.25rem 5rem;
+    background:
+      radial-gradient(60rem 30rem at 15% -10%, rgba(255,90,95,.14), transparent 60%),
+      radial-gradient(60rem 30rem at 85% -10%, rgba(0,168,150,.14), transparent 60%),
+      var(--paper);
+  }
+  #confetti{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+  .hero-inner{position:relative;z-index:2;max-width:56rem}
+  .eyebrow{color:var(--ink-soft);margin-bottom:1.2rem}
+  .double{
+    font-weight:900;
+    font-size:clamp(2.6rem,9vw,6.2rem);
+    line-height:.98;
+    letter-spacing:-.02em;
+    text-wrap:balance;
+  }
+  .double .a{color:var(--coral)}
+  .double .b{color:var(--teal)}
+  .double .ghost{
+    display:block;
+    -webkit-text-stroke:2px var(--ink);
+    color:transparent;
+    opacity:.22;
+    transform:scaleY(-1);
+    user-select:none;
+  }
+  .x2{
+    display:inline-block;background:var(--gold);color:var(--ink);
+    font-weight:900;border-radius:.4em .4em .4em 0;
+    padding:.05em .28em;transform:rotate(-6deg);
+  }
+  .names{
+    display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin:2rem 0 1.4rem;
+  }
+  .names input{
+    font:inherit;font-weight:700;font-size:1.05rem;
+    border:2px solid var(--ink);border-radius:999px;
+    padding:.55rem 1.1rem;background:var(--card);color:var(--ink);
+    width:11rem;text-align:center;outline-offset:3px;
+  }
+  .names input:first-child{border-color:var(--coral)}
+  .names input:last-child{border-color:var(--teal)}
+  .btn{
+    font:inherit;font-weight:800;font-size:1rem;
+    border:2px solid var(--ink);border-radius:999px;
+    padding:.7rem 1.5rem;cursor:pointer;
+    background:var(--ink);color:var(--paper);
+    box-shadow:0 4px 0 rgba(32,27,58,.35);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 rgba(32,27,58,.35)}
+  .btn:active{transform:translateY(1px);box-shadow:0 2px 0 rgba(32,27,58,.35)}
+  .btn:focus-visible,.names input:focus-visible,.opt:focus-visible{outline:3px solid var(--gold)}
+  .btn.gold{background:var(--gold);color:var(--ink)}
+  .btn.ghosty{background:var(--card);color:var(--ink)}
+
+  /* ---------- SECTIONS ---------- */
+  section{max-width:52rem;margin:0 auto;padding:4.5rem 1.25rem}
+  .sec-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:1.6rem}
+  .sec-head h2{font-weight:900;font-size:clamp(1.6rem,4vw,2.3rem);letter-spacing:-.01em}
+  .tag-a{color:var(--coral)} .tag-b{color:var(--teal)}
+  .lede{color:var(--ink-soft);max-width:38rem;margin-bottom:2rem}
+
+  /* ---------- TELEPATHY ---------- */
+  .stage{
+    background:var(--card);border:2px solid var(--ink);border-radius:1.25rem;
+    box-shadow:var(--shadow);padding:2rem 1.5rem;min-height:20rem;
+    display:flex;flex-direction:column;justify-content:center;gap:1.25rem;text-align:center;
+  }
+  .stage .who{font-weight:900;font-size:1.3rem}
+  .stage .q{font-weight:800;font-size:clamp(1.2rem,3.4vw,1.7rem);text-wrap:balance}
+  .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(12rem,1fr));gap:.7rem}
+  .opt{
+    font:inherit;font-weight:700;border:2px solid var(--ink);border-radius:.8rem;
+    background:var(--paper-2);color:var(--ink);padding:.85rem .9rem;cursor:pointer;
+    transition:transform .1s ease;
+  }
+  .opt:hover{transform:translateY(-2px);background:var(--gold)}
+  .progress{display:flex;gap:.35rem;justify-content:center}
+  .pip{width:.6rem;height:.6rem;border-radius:50%;background:var(--paper-2);border:1.5px solid var(--ink)}
+  .pip.done{background:var(--gold)}
+  .handoff-note{color:var(--ink-soft);font-size:.95rem}
+  .score{font-weight:900;font-size:clamp(2.6rem,8vw,4.5rem);line-height:1}
+  .verdict{font-weight:800;font-size:1.25rem;text-wrap:balance}
+  .breakdown{display:grid;gap:.4rem;text-align:left;max-width:34rem;margin:0 auto;font-size:.95rem}
+  .breakdown div{display:flex;gap:.5rem;align-items:baseline}
+  .hit{color:var(--teal);font-weight:800}
+  .miss{color:var(--coral);font-weight:800}
+
+  /* ---------- PHOTO BOOTH ---------- */
+  .drop{
+    border:2.5px dashed var(--ink);border-radius:1.25rem;background:var(--paper-2);
+    padding:3rem 1.5rem;text-align:center;cursor:pointer;transition:background .15s ease;
+  }
+  .drop:hover,.drop.over{background:var(--gold)}
+  .drop p{font-weight:800;font-size:1.15rem}
+  .drop small{color:var(--ink-soft);display:block;margin-top:.4rem}
+  .booth{position:relative;margin-top:1.5rem;display:none;min-height:26rem}
+  .booth.on{display:block}
+  .polaroid{
+    position:absolute;inset:0;margin:auto;
+    width:min(88%,26rem);
+    background:#fff;border:1px solid rgba(32,27,58,.15);
+    padding:.9rem .9rem 3.2rem;border-radius:.35rem;
+    box-shadow:0 18px 40px rgba(32,27,58,.25);
+    opacity:0;transform:rotate(-3deg) scale(.92);
+    transition:opacity .45s ease, transform .45s ease;
+  }
+  .polaroid.show{opacity:1;transform:rotate(var(--tilt,-2deg)) scale(1)}
+  .polaroid img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block;background:var(--paper-2)}
+  .polaroid .cap{
+    position:absolute;left:0;right:0;bottom:.7rem;text-align:center;
+    font-family:'Comic Sans MS','Segoe Print',cursive;font-size:1.05rem;color:var(--ink)
+  }
+  .booth-controls{display:flex;gap:.7rem;justify-content:center;margin-top:1rem;flex-wrap:wrap}
+
+  footer{
+    text-align:center;padding:3rem 1.25rem 4rem;color:var(--ink-soft);
+    background:linear-gradient(transparent, rgba(255,197,61,.18));
+  }
+  footer .double{font-size:clamp(1.4rem,4vw,2rem)}
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none!important;animation:none!important}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+  <div class="hero-inner">
+    <p class="eyebrow mono">One cake was never going to be enough</p>
+    <h1 class="double">
+      <span>HAPPY<br>BIRTHDAY <span class="x2">×2</span></span>
+      <span class="ghost" aria-hidden="true">HAPPY<br>BIRTHDAY ×2</span>
+    </h1>
+    <div class="names">
+      <input id="nameA" placeholder="Twin № 1" aria-label="First twin's name" maxlength="16">
+      <input id="nameB" placeholder="Twin № 2" aria-label="Second twin's name" maxlength="16">
+    </div>
+    <p class="lede" style="margin:0 auto 1.6rem">
+      <span class="tag-a" style="font-weight:800" id="heroA">You</span> +
+      <span class="tag-b" style="font-weight:800" id="heroB">your other half</span>
+      — same day, same face, double the trouble.
+    </p>
+    <button class="btn gold" id="rain">🎉 Make it rain</button>
+  </div>
+</header>
+
+<section id="telepathy">
+  <div class="sec-head">
+    <span class="mono tag-a">Game 01</span>
+    <h2>Twin Telepathy</h2>
+  </div>
+  <p class="lede">Pass one phone between you. Each twin answers the same 8 questions in secret — then we reveal how synced your brains really are. No conferring. No peeking. You know the rules.</p>
+  <div class="stage" id="stage" aria-live="polite"></div>
+</section>
+
+<section id="booth">
+  <div class="sec-head">
+    <span class="mono tag-b">Game 02</span>
+    <h2>Photo Booth Roulette</h2>
+  </div>
+  <p class="lede">Drop in a pile of your photos and hit shuffle — the booth deals them out polaroid-style with random captions. Everything runs right here in your browser; the photos are never uploaded anywhere.</p>
+  <div class="drop" id="drop" role="button" tabindex="0" aria-label="Add photos">
+    <p>📸 Tap here or drag photos in</p>
+    <small>Pick as many as you like — they stay on this device</small>
+    <input type="file" id="picker" accept="image/*" multiple hidden>
+  </div>
+  <div class="booth" id="boothStage">
+    <figure class="polaroid" id="pol1"><img alt="Birthday photo"><figcaption class="cap"></figcaption></figure>
+    <figure class="polaroid" id="pol2"><img alt="Birthday photo"><figcaption class="cap"></figcaption></figure>
+  </div>
+  <div class="booth-controls" id="boothControls" style="display:none">
+    <button class="btn" id="nextPhoto">Next photo 🎲</button>
+    <button class="btn ghosty" id="autoPlay">▶ Auto slideshow</button>
+    <button class="btn ghosty" id="morePhotos">+ Add more</button>
+  </div>
+</section>
+
+<footer>
+  <p class="mono" style="margin-bottom:.6rem">Two candles minimum</p>
+  <p class="double"><span class="tag-a" id="footA">Twin 1</span> <span style="opacity:.5">&amp;</span> <span class="tag-b" id="footB">Twin 2</span></p>
+  <p style="margin-top:.8rem">Womb-mates for life. 🎂🎂</p>
+</footer>
+
+<script>
+(function(){
+  'use strict';
+  var $ = function(id){ return document.getElementById(id); };
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- names ---------- */
+  var nameA = $('nameA'), nameB = $('nameB');
+  function syncNames(){
+    var a = nameA.value.trim() || 'Twin 1';
+    var b = nameB.value.trim() || 'Twin 2';
+    $('heroA').textContent = a === 'Twin 1' ? 'You' : a;
+    $('heroB').textContent = b === 'Twin 2' ? 'your other half' : b;
+    $('footA').textContent = a; $('footB').textContent = b;
+    try{ localStorage.setItem('twinNames', JSON.stringify([nameA.value, nameB.value])); }catch(e){}
+  }
+  try{
+    var saved = JSON.parse(localStorage.getItem('twinNames') || '[]');
+    if(saved[0]) nameA.value = saved[0];
+    if(saved[1]) nameB.value = saved[1];
+  }catch(e){}
+  nameA.addEventListener('input', syncNames);
+  nameB.addEventListener('input', syncNames);
+  syncNames();
+  function nm(i){ return i === 0 ? (nameA.value.trim() || 'Twin 1') : (nameB.value.trim() || 'Twin 2'); }
+
+  /* ---------- confetti ---------- */
+  var cvs = $('confetti'), ctx = cvs.getContext('2d');
+  var bits = [], colors = ['#FF5A5F','#00A896','#FFC53D','#201B3A','#FF8A5B'];
+  var running = false;
+  function sizeCanvas(){
+    cvs.width = cvs.offsetWidth * devicePixelRatio;
+    cvs.height = cvs.offsetHeight * devicePixelRatio;
+    ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+  }
+  addEventListener('resize', sizeCanvas); sizeCanvas();
+  function burst(n){
+    if(reduced) return;
+    var w = cvs.offsetWidth;
+    for(var i=0;i<n;i++){
+      bits.push({
+        x: Math.random()*w, y: -20 - Math.random()*120,
+        vx: (Math.random()-.5)*2.2, vy: 2 + Math.random()*3.2,
+        s: 5 + Math.random()*7, r: Math.random()*Math.PI,
+        vr: (Math.random()-.5)*.25, c: colors[i % colors.length]
+      });
+    }
+    if(!running){ running = true; requestAnimationFrame(tick); }
+  }
+  function tick(){
+    var h = cvs.offsetHeight;
+    ctx.clearRect(0,0,cvs.offsetWidth,h);
+    bits = bits.filter(function(p){ return p.y < h + 30; });
+    bits.forEach(function(p){
+      p.x += p.vx; p.y += p.vy; p.r += p.vr;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r);
+      ctx.fillStyle = p.c; ctx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.6);
+      ctx.restore();
+    });
+    if(bits.length){ requestAnimationFrame(tick); } else { running = false; }
+  }
+  $('rain').addEventListener('click', function(){ burst(220); });
+  burst(140);
+
+  /* ---------- telepathy ---------- */
+  var QS = [
+    {q:'Pizza has arrived. Last slice — who actually gets it?', o:['Twin 1, obviously','Twin 2, obviously','We split it','Whoever grabs first']},
+    {q:'Which twin was born first?', o:['Twin 1','Twin 2','We tell people different answers']},
+    {q:'One of you is definitely the “evil twin.” Which one?', o:['Twin 1','Twin 2','Depends on the day']},
+    {q:'Mum needs a favour at 7am. Who does she call?', o:['Twin 1','Twin 2','She calls both, twice']},
+    {q:'A stranger mixes you two up. What happens?', o:['We correct them politely','We swap identities immediately','We’ve stopped correcting people years ago']},
+    {q:'Who takes longer to get ready?', o:['Twin 1','Twin 2','Painfully, both of us']},
+    {q:'Ideal birthday tonight is…', o:['Big loud party','Food coma with the family','Gaming / movie marathon','Sleep. Just sleep.']},
+    {q:'In a horror movie, which twin survives?', o:['Twin 1','Twin 2','Neither, we’d go back for each other']}
+  ];
+  var stage = $('stage');
+  var answers = [[],[]], turn = 0, qi = 0;
+
+  function optLabel(t){ return t.replace('Twin 1', nm(0)).replace('Twin 2', nm(1)); }
+  function pips(){
+    var h = '<div class="progress">';
+    for(var i=0;i<QS.length;i++) h += '<span class="pip'+(i<qi?' done':'')+'"></span>';
+    return h + '</div>';
+  }
+  function showIntro(){
+    stage.innerHTML =
+      '<p class="who">Ready to prove the telepathy is real?</p>' +
+      '<p class="handoff-note">' + nm(0) + ' goes first. ' + nm(1) + ', look away — seriously.</p>' +
+      '<div><button class="btn gold" id="startQ">I’m ' + nm(0) + ' — start</button></div>';
+    $('startQ').addEventListener('click', function(){ qi = 0; showQ(); });
+  }
+  function showQ(){
+    var item = QS[qi];
+    var h = '<p class="who" style="color:' + (turn===0?'var(--coral)':'var(--teal)') + '">' + nm(turn) + ' answering</p>' +
+      '<p class="q">' + item.q + '</p><div class="opts">';
+    item.o.forEach(function(o,i){
+      h += '<button class="opt" data-i="'+i+'">' + optLabel(o) + '</button>';
+    });
+    stage.innerHTML = h + '</div>' + pips();
+    Array.prototype.forEach.call(stage.querySelectorAll('.opt'), function(b){
+      b.addEventListener('click', function(){
+        answers[turn][qi] = +b.dataset.i;
+        qi++;
+        if(qi < QS.length){ showQ(); }
+        else if(turn === 0){ showHandoff(); }
+        else { showResult(); }
+      });
+    });
+  }
+  function showHandoff(){
+    turn = 1; qi = 0;
+    stage.innerHTML =
+      '<p class="who">📱 Phone handoff!</p>' +
+      '<p class="handoff-note">' + nm(0) + ', your answers are locked in. Pass the phone to <strong>' + nm(1) + '</strong> — no hints, no eyebrows.</p>' +
+      '<div><button class="btn gold" id="startQ2">I’m ' + nm(1) + ' — my turn</button></div>';
+    $('startQ2').addEventListener('click', showQ);
+  }
+  function showResult(){
+    var hits = 0, rows = '';
+    QS.forEach(function(item,i){
+      var same = answers[0][i] === answers[1][i];
+      if(same) hits++;
+      rows += '<div><span class="'+(same?'hit':'miss')+'">'+(same?'✓':'✗')+'</span><span>'+item.q+'</span></div>';
+    });
+    var pct = Math.round(hits/QS.length*100);
+    var verdict =
+      pct === 100 ? 'Certified one brain in two bodies. Scientists should study you.' :
+      pct >= 75  ? 'Dangerously synced. You two definitely finish each other’s sentences.' :
+      pct >= 50  ? 'Half telepathy, half chaos. Sounds about right for siblings.' :
+      pct >= 25  ? 'Are you sure you two are related?' :
+                   'The hospital may owe your parents an explanation.';
+    stage.innerHTML =
+      '<p class="mono">Telepathy score</p>' +
+      '<p class="score"><span class="tag-a">'+hits+'</span><span style="opacity:.4">/'+QS.length+'</span> <span class="tag-b">('+pct+'%)</span></p>' +
+      '<p class="verdict">'+verdict+'</p>' +
+      '<div class="breakdown">'+rows+'</div>' +
+      '<div><button class="btn ghosty" id="again">Run it back</button></div>';
+    burst(pct >= 50 ? 260 : 80);
+    $('again').addEventListener('click', function(){
+      answers = [[],[]]; turn = 0; qi = 0; showIntro();
+    });
+  }
+  showIntro();
+
+  /* ---------- photo booth ---------- */
+  var drop = $('drop'), picker = $('picker');
+  var pols = [$('pol1'), $('pol2')], polTurn = 0;
+  var photos = [], order = [], oi = 0, autoTimer = null;
+  var caps = ['best day ever 🎂','double trouble','×2 energy','same face, no refunds',
+    'vintage us','peak chaos','the good years','evidence','icons only','womb-mates 4 life'];
+
+  function addFiles(files){
+    Array.prototype.forEach.call(files, function(f){
+      if(f.type.indexOf('image/') === 0) photos.push(URL.createObjectURL(f));
+    });
+    if(photos.length){
+      order = photos.map(function(_,i){ return i; });
+      shuffle(order); oi = 0;
+      $('boothStage').classList.add('on');
+      $('boothControls').style.display = 'flex';
+      drop.style.display = 'none';
+      nextPhoto();
+    }
+  }
+  function shuffle(a){
+    for(var i=a.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1)), t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+  }
+  function nextPhoto(){
+    if(!photos.length) return;
+    if(oi >= order.length){ shuffle(order); oi = 0; }
+    var incoming = pols[polTurn % 2], outgoing = pols[(polTurn+1) % 2];
+    polTurn++;
+    incoming.querySelector('img').src = photos[order[oi++]];
+    incoming.querySelector('.cap').textContent = caps[Math.floor(Math.random()*caps.length)];
+    incoming.style.setProperty('--tilt', (Math.random()*8-4).toFixed(1) + 'deg');
+    incoming.style.zIndex = 2; outgoing.style.zIndex = 1;
+    outgoing.classList.remove('show');
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ incoming.classList.add('show'); }); });
+  }
+  drop.addEventListener('click', function(){ picker.click(); });
+  drop.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); picker.click(); } });
+  picker.addEventListener('change', function(){ addFiles(picker.files); picker.value=''; });
+  ['dragover','dragenter'].forEach(function(ev){
+    drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.add('over'); });
+  });
+  ['dragleave','drop'].forEach(function(ev){
+    drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.remove('over'); });
+  });
+  drop.addEventListener('drop', function(e){ addFiles(e.dataTransfer.files); });
+  $('nextPhoto').addEventListener('click', function(){ stopAuto(); nextPhoto(); });
+  $('morePhotos').addEventListener('click', function(){ picker.click(); });
+  function stopAuto(){
+    if(autoTimer){ clearInterval(autoTimer); autoTimer = null; $('autoPlay').textContent = '▶ Auto slideshow'; }
+  }
+  $('autoPlay').addEventListener('click', function(){
+    if(autoTimer){ stopAuto(); return; }
+    $('autoPlay').textContent = '⏸ Pause';
+    nextPhoto();
+    autoTimer = setInterval(nextPhoto, 3200);
+  });
+
+  /* Auto-load photos committed to the photos/ folder (listed in photos/manifest.json).
+     Needs the page served over http (e.g. `python3 -m http.server`); on file:// or when
+     no manifest exists this silently falls back to the tap-to-add flow. */
+  fetch('photos/manifest.json')
+    .then(function(r){ return r.ok ? r.json() : null; })
+    .then(function(list){
+      if(!Array.isArray(list) || !list.length) return;
+      photos = list.map(function(f){ return 'photos/' + f; });
+      order = photos.map(function(_,i){ return i; });
+      shuffle(order); oi = 0;
+      $('boothStage').classList.add('on');
+      $('boothControls').style.display = 'flex';
+      drop.style.display = 'none';
+      nextPhoto();
+    })
+    .catch(function(){});
+})();
+</script>
+</body>
+</html>
