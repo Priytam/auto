@@ -86,9 +86,16 @@
   }
   .btn:hover{transform:translateY(-2px);box-shadow:0 6px 0 rgba(32,27,58,.35)}
   .btn:active{transform:translateY(1px);box-shadow:0 2px 0 rgba(32,27,58,.35)}
-  .btn:focus-visible,.names input:focus-visible,.opt:focus-visible{outline:3px solid var(--gold)}
+  .btn:focus-visible,.names input:focus-visible,.opt:focus-visible,
+  .guest-name:focus-visible,.linkish:focus-visible{outline:3px solid var(--gold)}
   .btn.gold{background:var(--gold);color:var(--ink)}
   .btn.ghosty{background:var(--card);color:var(--ink)}
+  .btn.coral{background:var(--coral);color:#fff}
+  .btn.teal{background:var(--teal);color:#fff}
+  .linkish{
+    font:inherit;font-size:.85rem;font-weight:600;color:var(--ink-soft);
+    background:none;border:none;cursor:pointer;text-decoration:underline;
+  }
 
   /* ---------- SECTIONS ---------- */
   section{max-width:52rem;margin:0 auto;padding:4.5rem 1.25rem}
@@ -97,7 +104,7 @@
   .tag-a{color:var(--coral)} .tag-b{color:var(--teal)}
   .lede{color:var(--ink-soft);max-width:38rem;margin-bottom:2rem}
 
-  /* ---------- TELEPATHY ---------- */
+  /* ---------- GAME STAGE (shared) ---------- */
   .stage{
     background:var(--card);border:2px solid var(--ink);border-radius:1.25rem;
     box-shadow:var(--shadow);padding:2rem 1.5rem;min-height:20rem;
@@ -112,7 +119,9 @@
     transition:transform .1s ease;
   }
   .opt:hover{transform:translateY(-2px);background:var(--gold)}
-  .progress{display:flex;gap:.35rem;justify-content:center}
+  .opt.opt-a:hover{background:var(--coral);color:#fff}
+  .opt.opt-b:hover{background:var(--teal);color:#fff}
+  .progress{display:flex;gap:.35rem;justify-content:center;flex-wrap:wrap}
   .pip{width:.6rem;height:.6rem;border-radius:50%;background:var(--paper-2);border:1.5px solid var(--ink)}
   .pip.done{background:var(--gold)}
   .handoff-note{color:var(--ink-soft);font-size:.95rem}
@@ -123,6 +132,24 @@
   .hit{color:var(--teal);font-weight:800}
   .miss{color:var(--coral);font-weight:800}
 
+  /* ---------- WHO'S WHO ---------- */
+  .guest-name{
+    font:inherit;font-weight:700;font-size:1.05rem;
+    border:2px solid var(--ink);border-radius:999px;
+    padding:.6rem 1.2rem;background:var(--paper-2);color:var(--ink);
+    width:min(100%,18rem);text-align:center;
+  }
+  .board{display:grid;gap:.45rem;max-width:30rem;margin:0 auto;text-align:left}
+  .board-row{
+    display:grid;grid-template-columns:2.2rem 1fr auto;gap:.6rem;align-items:center;
+    background:var(--paper-2);border:2px solid var(--ink);border-radius:.7rem;
+    padding:.5rem .8rem;font-weight:700;
+  }
+  .board-row .rank{font-weight:900;font-variant-numeric:tabular-nums}
+  .board-row .pts{font-variant-numeric:tabular-nums}
+  .board-row.first{background:var(--gold);transform:rotate(-.5deg)}
+  .stage-actions{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap}
+
   /* ---------- PHOTO BOOTH ---------- */
   .drop{
     border:2.5px dashed var(--ink);border-radius:1.25rem;background:var(--paper-2);
@@ -131,6 +158,7 @@
   .drop:hover,.drop.over{background:var(--gold)}
   .drop p{font-weight:800;font-size:1.15rem}
   .drop small{color:var(--ink-soft);display:block;margin-top:.4rem}
+  .booth-extra{display:flex;gap:.7rem;justify-content:center;margin-top:1rem;flex-wrap:wrap}
   .booth{position:relative;margin-top:1.5rem;display:none;min-height:26rem}
   .booth.on{display:block}
   .polaroid{
@@ -189,20 +217,33 @@
     <span class="mono tag-a">Game 01</span>
     <h2>Twin Telepathy</h2>
   </div>
-  <p class="lede">Pass one phone between you. Each twin answers the same 8 questions in secret — then we reveal how synced your brains really are. No conferring. No peeking. You know the rules.</p>
+  <p class="lede">For the two of you. Pass one phone between you — each twin answers the same 8 questions in secret, then we reveal how synced your brains really are. No conferring. No peeking.</p>
   <div class="stage" id="stage" aria-live="polite"></div>
+</section>
+
+<section id="whoswho">
+  <div class="sec-head">
+    <span class="mono" style="color:var(--gold)">Game 02</span>
+    <h2>Who's Who? — the guest challenge</h2>
+  </div>
+  <p class="lede">For everyone else. First, the twins set the official answers <em>together</em> — who's messier, who loves home more, who's mom's favourite. Then guests play one at a time, get scored against the truth, and the leaderboard crowns whoever really knows you two. 👑</p>
+  <div class="stage" id="wwStage" aria-live="polite"></div>
 </section>
 
 <section id="booth">
   <div class="sec-head">
-    <span class="mono tag-b">Game 02</span>
+    <span class="mono tag-b">Game 03</span>
     <h2>Photo Booth Roulette</h2>
   </div>
-  <p class="lede">Drop in a pile of your photos and hit shuffle — the booth deals them out polaroid-style with random captions. Everything runs right here in your browser; the photos are never uploaded anywhere.</p>
+  <p class="lede">Add a pile of photos and the booth deals them out polaroid-style with random captions. On your phone, the picker opens your gallery — and you can choose Google Photos as the source right in the picker. Photos stay on this device: nothing is ever uploaded, and they're remembered for next time.</p>
   <div class="drop" id="drop" role="button" tabindex="0" aria-label="Add photos">
     <p>📸 Tap here or drag photos in</p>
-    <small>Pick as many as you like — they stay on this device</small>
+    <small>Opens your gallery / Google Photos picker — photos never leave this device</small>
     <input type="file" id="picker" accept="image/*" multiple hidden>
+    <input type="file" id="camera" accept="image/*" capture="environment" hidden>
+  </div>
+  <div class="booth-extra" id="boothExtra">
+    <button class="btn ghosty" id="snap">📷 Or take one right now</button>
   </div>
   <div class="booth" id="boothStage">
     <figure class="polaroid" id="pol1"><img alt="Birthday photo"><figcaption class="cap"></figcaption></figure>
@@ -212,6 +253,8 @@
     <button class="btn" id="nextPhoto">Next photo 🎲</button>
     <button class="btn ghosty" id="autoPlay">▶ Auto slideshow</button>
     <button class="btn ghosty" id="morePhotos">+ Add more</button>
+    <button class="btn ghosty" id="snap2">📷 Camera</button>
+    <button class="linkish" id="clearPhotos">clear saved photos</button>
   </div>
 </section>
 
@@ -246,6 +289,9 @@
   nameB.addEventListener('input', syncNames);
   syncNames();
   function nm(i){ return i === 0 ? (nameA.value.trim() || 'Twin 1') : (nameB.value.trim() || 'Twin 2'); }
+  function esc(s){
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
 
   /* ---------- confetti ---------- */
   var cvs = $('confetti'), ctx = cvs.getContext('2d');
@@ -285,7 +331,7 @@
   $('rain').addEventListener('click', function(){ burst(220); });
   burst(140);
 
-  /* ---------- telepathy ---------- */
+  /* ---------- game 01: telepathy ---------- */
   var QS = [
     {q:'Pizza has arrived. Last slice — who actually gets it?', o:['Twin 1, obviously','Twin 2, obviously','We split it','Whoever grabs first']},
     {q:'Which twin was born first?', o:['Twin 1','Twin 2','We tell people different answers']},
@@ -299,27 +345,27 @@
   var stage = $('stage');
   var answers = [[],[]], turn = 0, qi = 0;
 
-  function optLabel(t){ return t.replace('Twin 1', nm(0)).replace('Twin 2', nm(1)); }
-  function pips(){
+  function optLabel(t){ return esc(t).replace('Twin 1', esc(nm(0))).replace('Twin 2', esc(nm(1))); }
+  function pips(n, at){
     var h = '<div class="progress">';
-    for(var i=0;i<QS.length;i++) h += '<span class="pip'+(i<qi?' done':'')+'"></span>';
+    for(var i=0;i<n;i++) h += '<span class="pip'+(i<at?' done':'')+'"></span>';
     return h + '</div>';
   }
   function showIntro(){
     stage.innerHTML =
       '<p class="who">Ready to prove the telepathy is real?</p>' +
-      '<p class="handoff-note">' + nm(0) + ' goes first. ' + nm(1) + ', look away — seriously.</p>' +
-      '<div><button class="btn gold" id="startQ">I’m ' + nm(0) + ' — start</button></div>';
+      '<p class="handoff-note">' + esc(nm(0)) + ' goes first. ' + esc(nm(1)) + ', look away — seriously.</p>' +
+      '<div><button class="btn gold" id="startQ">I’m ' + esc(nm(0)) + ' — start</button></div>';
     $('startQ').addEventListener('click', function(){ qi = 0; showQ(); });
   }
   function showQ(){
     var item = QS[qi];
-    var h = '<p class="who" style="color:' + (turn===0?'var(--coral)':'var(--teal)') + '">' + nm(turn) + ' answering</p>' +
+    var h = '<p class="who" style="color:' + (turn===0?'var(--coral)':'var(--teal)') + '">' + esc(nm(turn)) + ' answering</p>' +
       '<p class="q">' + item.q + '</p><div class="opts">';
     item.o.forEach(function(o,i){
       h += '<button class="opt" data-i="'+i+'">' + optLabel(o) + '</button>';
     });
-    stage.innerHTML = h + '</div>' + pips();
+    stage.innerHTML = h + '</div>' + pips(QS.length, qi);
     Array.prototype.forEach.call(stage.querySelectorAll('.opt'), function(b){
       b.addEventListener('click', function(){
         answers[turn][qi] = +b.dataset.i;
@@ -334,8 +380,8 @@
     turn = 1; qi = 0;
     stage.innerHTML =
       '<p class="who">📱 Phone handoff!</p>' +
-      '<p class="handoff-note">' + nm(0) + ', your answers are locked in. Pass the phone to <strong>' + nm(1) + '</strong> — no hints, no eyebrows.</p>' +
-      '<div><button class="btn gold" id="startQ2">I’m ' + nm(1) + ' — my turn</button></div>';
+      '<p class="handoff-note">' + esc(nm(0)) + ', your answers are locked in. Pass the phone to <strong>' + esc(nm(1)) + '</strong> — no hints, no eyebrows.</p>' +
+      '<div><button class="btn gold" id="startQ2">I’m ' + esc(nm(1)) + ' — my turn</button></div>';
     $('startQ2').addEventListener('click', showQ);
   }
   function showResult(){
@@ -365,25 +411,194 @@
   }
   showIntro();
 
-  /* ---------- photo booth ---------- */
-  var drop = $('drop'), picker = $('picker');
+  /* ---------- game 02: who's who ---------- */
+  var WW = [
+    'Who’s more likely to be late to their own birthday party?',
+    'Who’s the bigger foodie?',
+    'Who secretly loves staying home more?',
+    'Who’s better at saving money?',
+    'Who cries in emotional movies?',
+    'Who wins most of the arguments?',
+    'Who’s the better dancer?',
+    'Who was the naughtier kid at school?',
+    'Who’s more addicted to their phone?',
+    'Who’s mom’s favourite? (be honest)',
+    'Who’d survive longer on a deserted island?',
+    'Who’s the bigger flirt?'
+  ];
+  var wwStage = $('wwStage');
+  var wwKey = null, wwBoard = [];
+  try{
+    wwKey = JSON.parse(localStorage.getItem('wwKey') || 'null');
+    wwBoard = JSON.parse(localStorage.getItem('wwBoard') || '[]');
+  }catch(e){}
+  function wwSave(){
+    try{
+      localStorage.setItem('wwKey', JSON.stringify(wwKey));
+      localStorage.setItem('wwBoard', JSON.stringify(wwBoard));
+    }catch(e){}
+  }
+  function abOpts(){
+    return '<div class="opts">' +
+      '<button class="opt opt-a" data-i="0">' + esc(nm(0)) + '</button>' +
+      '<button class="opt opt-b" data-i="1">' + esc(nm(1)) + '</button></div>';
+  }
+  function boardHTML(hi){
+    if(!wwBoard.length) return '<p class="handoff-note">No guests have played yet. Grab someone!</p>';
+    var sorted = wwBoard.slice().sort(function(a,b){ return b.score - a.score; });
+    var h = '<div class="board">';
+    sorted.slice(0,10).forEach(function(g,i){
+      var me = hi && g.name === hi.name && g.score === hi.score;
+      h += '<div class="board-row'+(i===0?' first':'')+'"'+(me?' style="border-color:var(--coral)"':'')+'>' +
+        '<span class="rank">'+(i===0?'👑':(i+1))+'</span>' +
+        '<span>'+esc(g.name)+'</span>' +
+        '<span class="pts">'+g.score+'/'+WW.length+'</span></div>';
+    });
+    return h + '</div>';
+  }
+  function wwLobby(hi){
+    var champ = '';
+    if(wwBoard.length){
+      var top = wwBoard.slice().sort(function(a,b){ return b.score - a.score; })[0];
+      champ = '<p class="verdict">Current champion: ' + esc(top.name) + ' 👑</p>';
+    }
+    wwStage.innerHTML =
+      (wwKey
+        ? '<p class="who">Leaderboard</p>' + champ + boardHTML(hi) +
+          '<div class="stage-actions">' +
+          '<label for="guestName" class="handoff-note" style="width:100%">Next challenger, type your name:</label>' +
+          '<input class="guest-name" id="guestName" maxlength="20" placeholder="Guest name">' +
+          '<button class="btn gold" id="guestGo">Play ▸</button></div>' +
+          '<div class="stage-actions">' +
+          '<button class="linkish" id="redoKey">redo twins’ answers</button>' +
+          '<button class="linkish" id="resetBoard">reset leaderboard</button></div>'
+        : '<p class="who">Step 1 — set the official answers</p>' +
+          '<p class="handoff-note">' + esc(nm(0)) + ' and ' + esc(nm(1)) + ': answer these ' + WW.length +
+          ' together, out loud. Argue if you must — the final say becomes the answer key guests are judged against.</p>' +
+          '<div><button class="btn gold" id="setKey">We’re ready — set the truth</button></div>');
+    if(wwKey){
+      $('guestGo').addEventListener('click', startGuest);
+      $('guestName').addEventListener('keydown', function(e){ if(e.key === 'Enter') startGuest(); });
+      $('redoKey').addEventListener('click', function(){
+        if(confirm('Redo the twins’ answers? The leaderboard will be cleared too — old scores were judged against the old truth.')){
+          wwKey = null; wwBoard = []; wwSave(); wwLobby();
+        }
+      });
+      $('resetBoard').addEventListener('click', function(){
+        if(confirm('Clear the leaderboard?')){ wwBoard = []; wwSave(); wwLobby(); }
+      });
+    } else {
+      $('setKey').addEventListener('click', function(){ wwAsk(0, [], null); });
+    }
+  }
+  function wwAsk(i, acc, guest){
+    wwStage.innerHTML =
+      '<p class="who" style="color:'+(guest?'var(--gold)':'var(--ink)')+'">' +
+      (guest ? esc(guest) + ' — who is it?' : 'Twins deciding…') + '</p>' +
+      '<p class="q">' + WW[i] + '</p>' + abOpts() + pips(WW.length, i);
+    Array.prototype.forEach.call(wwStage.querySelectorAll('.opt'), function(b){
+      b.addEventListener('click', function(){
+        acc.push(+b.dataset.i);
+        if(acc.length < WW.length){ wwAsk(acc.length, acc, guest); }
+        else if(guest){ wwScore(guest, acc); }
+        else {
+          wwKey = acc; wwSave();
+          wwStage.innerHTML =
+            '<p class="who">🔒 The truth is locked in.</p>' +
+            '<p class="handoff-note">Now hand the phone to a guest and see who really knows you two.</p>' +
+            '<div><button class="btn gold" id="toLobby">Open the leaderboard</button></div>';
+          $('toLobby').addEventListener('click', function(){ wwLobby(); });
+        }
+      });
+    });
+  }
+  function startGuest(){
+    var name = $('guestName').value.trim();
+    if(!name){ $('guestName').focus(); return; }
+    wwStage.innerHTML =
+      '<p class="who" style="color:var(--gold)">' + esc(name) + ', you’re up!</p>' +
+      '<p class="handoff-note">' + WW.length + ' questions. Pick a twin for each. The twins already locked in the real answers — no help from the audience.</p>' +
+      '<div><button class="btn gold" id="beginGuest">Start</button></div>';
+    $('beginGuest').addEventListener('click', function(){ wwAsk(0, [], name); });
+  }
+  function wwScore(name, acc){
+    var hits = 0, rows = '';
+    WW.forEach(function(q,i){
+      var ok = acc[i] === wwKey[i];
+      if(ok) hits++;
+      rows += '<div><span class="'+(ok?'hit':'miss')+'">'+(ok?'✓':'✗')+'</span><span>'+q+
+        ' <strong>('+esc(nm(wwKey[i]))+')</strong></span></div>';
+    });
+    var prevTop = wwBoard.length ? Math.max.apply(null, wwBoard.map(function(g){ return g.score; })) : -1;
+    var entry = {name:name, score:hits};
+    wwBoard.push(entry); wwSave();
+    var newChamp = hits > prevTop;
+    var verdict =
+      hits === WW.length ? 'Perfect score?! You’re basically the third twin.' :
+      hits >= 9 ? 'Inner circle confirmed. These two can’t hide anything from you.' :
+      hits >= 6 ? 'Solid. You know them… mostly the flattering half.' :
+      hits >= 3 ? 'Acquaintance energy. Time for more hangouts.' :
+                  'Do you even know these two?!';
+    wwStage.innerHTML =
+      '<p class="mono">' + esc(name) + '’s score</p>' +
+      '<p class="score"><span style="color:var(--gold)">'+hits+'</span><span style="opacity:.4">/'+WW.length+'</span></p>' +
+      '<p class="verdict">'+(newChamp?'👑 New champion! ':'')+verdict+'</p>' +
+      '<div class="breakdown">'+rows+'</div>' +
+      '<div><button class="btn gold" id="backLobby">Leaderboard ▸ next guest</button></div>';
+    burst(newChamp ? 300 : 120);
+    $('backLobby').addEventListener('click', function(){ wwLobby(entry); });
+  }
+  wwLobby();
+
+  /* ---------- game 03: photo booth ---------- */
+  var drop = $('drop'), picker = $('picker'), camera = $('camera');
   var pols = [$('pol1'), $('pol2')], polTurn = 0;
   var photos = [], order = [], oi = 0, autoTimer = null;
   var caps = ['best day ever 🎂','double trouble','×2 energy','same face, no refunds',
     'vintage us','peak chaos','the good years','evidence','icons only','womb-mates 4 life'];
 
+  /* photos persist on-device in IndexedDB — never uploaded */
+  var db = null;
+  try{
+    var idb = indexedDB.open('twinparty', 1);
+    idb.onupgradeneeded = function(e){ e.target.result.createObjectStore('photos', {autoIncrement:true}); };
+    idb.onsuccess = function(e){
+      db = e.target.result;
+      var got = [];
+      db.transaction('photos').objectStore('photos').openCursor().onsuccess = function(ev){
+        var cur = ev.target.result;
+        if(cur){ got.push(cur.value); cur.continue(); }
+        else if(got.length && !photos.length){
+          got.forEach(function(blob){ photos.push(URL.createObjectURL(blob)); });
+          bootBooth();
+        }
+      };
+    };
+  }catch(e){}
+  function persist(f){
+    if(!db) return;
+    try{ db.transaction('photos','readwrite').objectStore('photos').add(f); }catch(e){}
+  }
+
+  function bootBooth(){
+    order = photos.map(function(_,i){ return i; });
+    shuffle(order); oi = 0;
+    $('boothStage').classList.add('on');
+    $('boothControls').style.display = 'flex';
+    drop.style.display = 'none';
+    $('boothExtra').style.display = 'none';
+    nextPhoto();
+  }
   function addFiles(files){
+    var added = false;
     Array.prototype.forEach.call(files, function(f){
-      if(f.type.indexOf('image/') === 0) photos.push(URL.createObjectURL(f));
+      if(f.type.indexOf('image/') === 0){
+        photos.push(URL.createObjectURL(f));
+        persist(f);
+        added = true;
+      }
     });
-    if(photos.length){
-      order = photos.map(function(_,i){ return i; });
-      shuffle(order); oi = 0;
-      $('boothStage').classList.add('on');
-      $('boothControls').style.display = 'flex';
-      drop.style.display = 'none';
-      nextPhoto();
-    }
+    if(added) bootBooth();
   }
   function shuffle(a){
     for(var i=a.length-1;i>0;i--){
@@ -405,6 +620,9 @@
   drop.addEventListener('click', function(){ picker.click(); });
   drop.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); picker.click(); } });
   picker.addEventListener('change', function(){ addFiles(picker.files); picker.value=''; });
+  camera.addEventListener('change', function(){ addFiles(camera.files); camera.value=''; });
+  $('snap').addEventListener('click', function(){ camera.click(); });
+  $('snap2').addEventListener('click', function(){ camera.click(); });
   ['dragover','dragenter'].forEach(function(ev){
     drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.add('over'); });
   });
@@ -414,6 +632,16 @@
   drop.addEventListener('drop', function(e){ addFiles(e.dataTransfer.files); });
   $('nextPhoto').addEventListener('click', function(){ stopAuto(); nextPhoto(); });
   $('morePhotos').addEventListener('click', function(){ picker.click(); });
+  $('clearPhotos').addEventListener('click', function(){
+    if(!confirm('Forget all saved photos on this device?')) return;
+    photos = []; order = []; oi = 0; stopAuto();
+    if(db){ try{ db.transaction('photos','readwrite').objectStore('photos').clear(); }catch(e){} }
+    $('boothStage').classList.remove('on');
+    $('boothControls').style.display = 'none';
+    drop.style.display = 'block';
+    $('boothExtra').style.display = 'flex';
+    pols.forEach(function(p){ p.classList.remove('show'); });
+  });
   function stopAuto(){
     if(autoTimer){ clearInterval(autoTimer); autoTimer = null; $('autoPlay').textContent = '▶ Auto slideshow'; }
   }
@@ -430,14 +658,9 @@
   fetch('photos/manifest.json')
     .then(function(r){ return r.ok ? r.json() : null; })
     .then(function(list){
-      if(!Array.isArray(list) || !list.length) return;
+      if(!Array.isArray(list) || !list.length || photos.length) return;
       photos = list.map(function(f){ return 'photos/' + f; });
-      order = photos.map(function(_,i){ return i; });
-      shuffle(order); oi = 0;
-      $('boothStage').classList.add('on');
-      $('boothControls').style.display = 'flex';
-      drop.style.display = 'none';
-      nextPhoto();
+      bootBooth();
     })
     .catch(function(){});
 })();

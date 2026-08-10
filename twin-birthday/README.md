@@ -7,8 +7,15 @@ no backend — everything runs in the browser.
 
 - **Twin Telepathy** — pass-the-phone quiz: both twins secretly answer the same
   8 questions, then get a sync score and a verdict.
+- **Who's Who? guest challenge** — the twins lock in the official answers
+  (who's messier, who's mom's favourite…), then guests play one at a time,
+  get scored against the truth, and a persistent leaderboard crowns the
+  champion. 👑
 - **Photo Booth Roulette** — a shuffled polaroid slideshow of your photos with
-  random captions. Photos are never uploaded anywhere.
+  random captions. On mobile the picker opens your gallery (Google Photos can
+  be chosen as the picker source on Android), there's a take-a-photo-now
+  camera button, and photos persist on-device via IndexedDB. Nothing is ever
+  uploaded.
 - Confetti, editable twin names (saved in `localStorage`), mobile-friendly.
 
 ## Run it
