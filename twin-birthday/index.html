@@ -226,7 +226,7 @@
     <span class="mono" style="color:var(--gold)">Game 02</span>
     <h2>Who's Who? — the guest challenge</h2>
   </div>
-  <p class="lede">For everyone else. First, the twins set the official answers <em>together</em> — who's messier, who loves home more, who's mom's favourite. Then guests play one at a time, get scored against the truth, and the leaderboard crowns whoever really knows you two. 👑</p>
+  <p class="lede">For everyone else. First, the twins set the official answers <em>together</em> — who's smarter, who's funnier, who earns more, who's mom's favourite. "Both" is a legal answer, this is a birthday. Then guests play one at a time, get scored against the truth, and the leaderboard crowns whoever really knows you two. 👑</p>
   <div class="stage" id="wwStage" aria-live="polite"></div>
 </section>
 
@@ -413,6 +413,14 @@
 
   /* ---------- game 02: who's who ---------- */
   var WW = [
+    'Who’s more hard-working?',
+    'Who’s smarter?',
+    'Who’s funnier?',
+    'Who’s more caring?',
+    'Who earns more? 💰',
+    'Who owns a car (or has dibs on the family one)?',
+    'Who’s the better cook?',
+    'Who’s more likely to become famous?',
     'Who’s more likely to be late to their own birthday party?',
     'Who’s the bigger foodie?',
     'Who secretly loves staying home more?',
@@ -432,16 +440,20 @@
     wwKey = JSON.parse(localStorage.getItem('wwKey') || 'null');
     wwBoard = JSON.parse(localStorage.getItem('wwBoard') || '[]');
   }catch(e){}
+  /* question set changed → an old answer key no longer lines up; start fresh */
+  if(wwKey && wwKey.length !== WW.length){ wwKey = null; wwBoard = []; }
   function wwSave(){
     try{
       localStorage.setItem('wwKey', JSON.stringify(wwKey));
       localStorage.setItem('wwBoard', JSON.stringify(wwBoard));
     }catch(e){}
   }
+  function wwName(i){ return i === 2 ? 'Both 👯' : nm(i); }
   function abOpts(){
     return '<div class="opts">' +
       '<button class="opt opt-a" data-i="0">' + esc(nm(0)) + '</button>' +
-      '<button class="opt opt-b" data-i="1">' + esc(nm(1)) + '</button></div>';
+      '<button class="opt opt-b" data-i="1">' + esc(nm(1)) + '</button>' +
+      '<button class="opt" data-i="2">Both 👯</button></div>';
   }
   function boardHTML(hi){
     if(!wwBoard.length) return '<p class="handoff-note">No guests have played yet. Grab someone!</p>';
@@ -517,7 +529,7 @@
     if(!name){ $('guestName').focus(); return; }
     wwStage.innerHTML =
       '<p class="who" style="color:var(--gold)">' + esc(name) + ', you’re up!</p>' +
-      '<p class="handoff-note">' + WW.length + ' questions. Pick a twin for each. The twins already locked in the real answers — no help from the audience.</p>' +
+      '<p class="handoff-note">' + WW.length + ' questions. Pick a twin — or “Both” — for each. The twins already locked in the real answers — no help from the audience.</p>' +
       '<div><button class="btn gold" id="beginGuest">Start</button></div>';
     $('beginGuest').addEventListener('click', function(){ wwAsk(0, [], name); });
   }
@@ -527,7 +539,7 @@
       var ok = acc[i] === wwKey[i];
       if(ok) hits++;
       rows += '<div><span class="'+(ok?'hit':'miss')+'">'+(ok?'✓':'✗')+'</span><span>'+q+
-        ' <strong>('+esc(nm(wwKey[i]))+')</strong></span></div>';
+        ' <strong>('+esc(wwName(wwKey[i]))+')</strong></span></div>';
     });
     var prevTop = wwBoard.length ? Math.max.apply(null, wwBoard.map(function(g){ return g.score; })) : -1;
     var entry = {name:name, score:hits};
@@ -535,9 +547,9 @@
     var newChamp = hits > prevTop;
     var verdict =
       hits === WW.length ? 'Perfect score?! You’re basically the third twin.' :
-      hits >= 9 ? 'Inner circle confirmed. These two can’t hide anything from you.' :
-      hits >= 6 ? 'Solid. You know them… mostly the flattering half.' :
-      hits >= 3 ? 'Acquaintance energy. Time for more hangouts.' :
+      hits >= Math.ceil(WW.length*.75) ? 'Inner circle confirmed. These two can’t hide anything from you.' :
+      hits >= Math.ceil(WW.length*.5)  ? 'Solid. You know them… mostly the flattering half.' :
+      hits >= Math.ceil(WW.length*.25) ? 'Acquaintance energy. Time for more hangouts.' :
                   'Do you even know these two?!';
     wwStage.innerHTML =
       '<p class="mono">' + esc(name) + '’s score</p>' +
